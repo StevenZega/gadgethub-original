@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\ProductController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -48,3 +49,8 @@ Route::get('/admin/dashboard', function () {
 Route::get('/user/dashboard', function () {
     return view('user.dashboard');
 })->middleware('auth');
+
+
+Route::prefix('admin')->group(function () {
+    Route::resource('products', ProductController::class);
+});

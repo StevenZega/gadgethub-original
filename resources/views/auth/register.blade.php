@@ -106,6 +106,22 @@
                     >
                 </div>
 
+                <!-- ROLE -->
+                <div>
+                    <label class="block mb-2 text-sm text-slate-300">
+                        Role
+                    </label>
+
+                    <select
+                        name="role"
+                        class="w-full px-5 py-4 rounded-2xl bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white"
+                    >
+                        <option value="">Select Role</option>
+                        <option value="customer">Customer</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
                 <button
                     type="submit"
                     class="w-full py-4 rounded-2xl bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-bold transition duration-300"

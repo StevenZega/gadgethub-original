@@ -227,9 +227,6 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-dark btn-modern">
-                <i class="bi bi-plus-circle"></i> Produk Baru
-            </button>
         </div>
     </div>
 

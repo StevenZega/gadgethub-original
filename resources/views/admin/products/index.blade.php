@@ -1,58 +1,87 @@
-@extends('admin.dashboard')
-
+@extends('admin.layout')
 @section('content')
 
-<a href="{{ route('products.create') }}" class="btn btn-primary mb-3">+ Add Product</a>
+<div class="card-modern">
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Daftar Produk</h3>
+            <p class="text-muted mb-0">Kelola semua produk toko kamu.</p>
+        </div>
+        <a href="{{ route('products.create') }}" class="btn btn-dark btn-modern">
+            <i class="bi bi-plus-circle"></i> Tambah Produk
+        </a>
+    </div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+    @if(session('success'))
+        <div class="alert alert-success rounded-4">
+            {{ session('success') }}
+        </div>
+    @endif
 
-    <tbody>
-        @foreach ($products as $product)
-        <tr>
-            <td>{{ $product->name }}</td>
+    <div class="table-responsive">
+        <table class="table table-modern align-middle">
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Stok</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
 
-            <td>
-                <img src="{{ asset('storage/' . $product->image) }}"
-                     width="80">
-            </td>
+            <tbody>
+                @foreach ($products as $product)
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="{{ asset('storage/' . $product->image) }}"
+                                 class="product-image">
 
-            <td>
-                <a href="{{ route('products.show', $product->id) }}"
-                   class="btn btn-info btn-sm">
-                    Read
-                </a>
+                            <div>
+                                <h6 class="mb-0 fw-semibold">{{ $product->name }}</h6>
+                                <small class="text-muted">Produk toko</small>
+                            </div>
+                        </div>
+                    </td>
 
-                <a href="{{ route('products.edit', $product->id) }}"
-                   class="btn btn-warning btn-sm">
-                    Edit
-                </a>
+                    <td>
+                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                    </td>
 
-                <form action="{{ route('products.destroy', $product->id) }}"
-                      method="POST"
-                      style="display:inline;">
+                    <td>
+                        {{ $product->stock }} pcs
+                    </td>
 
-                    @csrf
-                    @method('DELETE')
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('products.show', $product->id) }}"
+                               class="btn btn-outline-dark btn-sm rounded-3">
+                                Detail
+                            </a>
 
-                    <button class="btn btn-danger btn-sm">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+                            <a href="{{ route('products.edit', $product->id) }}"
+                               class="btn btn-warning btn-sm rounded-3 text-white">
+                                Edit
+                            </a>
+
+                            <form action="{{ route('products.destroy', $product->id) }}"
+                                  method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="btn btn-danger btn-sm rounded-3">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 @endsection

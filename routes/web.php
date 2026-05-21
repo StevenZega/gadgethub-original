@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return redirect('/login');
 });
-
 /*
 |--------------------------------------------------------------------------
 | AUTH
@@ -24,12 +24,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD
+| DASHBOARD & LANDING USER
 |--------------------------------------------------------------------------
 */
 
 Route::get('/dashboard', function () {
-
     if (!auth()->check()) {
         return redirect('/login');
     }
@@ -38,6 +37,7 @@ Route::get('/dashboard', function () {
         return redirect('/admin/dashboard');
     }
 
+    // 2. Jika dia user biasa/customer, arahkan ke HomeController (Landing Page)
     return redirect('/user/dashboard');
 
 })->middleware('auth');
@@ -46,9 +46,9 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth', 'admin']);
 
-Route::get('/user/dashboard', function () {
-    return view('user.dashboard');
-})->middleware('auth');
+
+// 3. Ubah route ini agar memanggil HomeController, bukan cuma return kosongan
+Route::get('/user/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth')->name('user.dashboard');
 
 
 Route::prefix('admin')->group(function () {

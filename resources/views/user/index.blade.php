@@ -52,35 +52,34 @@
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 @foreach($products as $product)
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 transition flex flex-col justify-between">
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 transition flex flex-col justify-between group">
                         
-                        <div>
+                        <a href="{{ route('user.products.show', $product->id) }}" class="block flex-1">
                             <div class="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
                                 @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                 @else
                                     <span class="text-gray-400 text-xs">No Image Available</span>
                                 @endif
                             </div>
 
-                            <div class="p-5">
-                                <h3 class="font-bold text-lg text-gray-800 line-clamp-1 mb-1" title="{{ $product->name }}">
+                            <div class="p-5 pb-0">
+                                <h3 class="font-bold text-lg text-gray-800 line-clamp-2 mb-2 group-hover:text-blue-600 transition" title="{{ $product->name }}">
                                     {{ $product->name }}
                                 </h3>
-                                <p class="text-xs text-gray-400 mb-3">Stok: <span class="font-semibold text-gray-600">{{ $product->stock }}</span></p>
-                                <p class="text-gray-600 text-sm line-clamp-2 mb-4">
-                                    {{ $product->description ?? 'Tidak ada deskripsi produk.' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="p-5 pt-0 border-t border-gray-50 mt-auto">
-                            <div class="flex items-center justify-between pt-4">
                                 <span class="text-xl font-extrabold text-blue-600">
                                     Rp {{ number_format($product->price, 0, ',', '.') }}
                                 </span>
-                                <button onclick="alert('Fitur Checkout segera hadir!')" class="bg-blue-50 text-blue-600 font-semibold px-4 py-2 rounded-xl text-sm hover:bg-blue-600 hover:text-white transition">
-                                    Beli
+                            </div>
+                        </a>
+
+                        <div class="p-5 pt-4 border-t border-gray-50 mt-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" class="flex items-center justify-center border border-blue-600 text-blue-600 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-blue-50 transition">
+                                    + Keranjang
+                                </button>
+                                <button type="button" class="bg-blue-600 text-white font-semibold py-2 px-3 rounded-xl text-xs hover:bg-blue-700 transition">
+                                    Checkout
                                 </button>
                             </div>
                         </div>

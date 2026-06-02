@@ -10,7 +10,6 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-// Autentikasi
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister']);
@@ -40,7 +39,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('products', ProductController::class);
 });
 
-// Route untuk fitur keranjang belanja (Harus Login)
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/user/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');

@@ -39,7 +39,6 @@
             <a href="{{ route('user.dashboard') }}" class="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-blue-400 transition group">
                 <i class="bi bi-arrow-left transition-transform group-hover:-translate-x-1"></i> Kembali Belanja
             </a>
-            <h1 class="text-2xl font-black tracking-tight text-white m-0">Keranjang Kamu</h1>
         </div>
 
         @if($cartItems->isEmpty())
@@ -79,20 +78,35 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
-                                <form action="{{ route('cart.update', $item->id) }}" method="POST" class="flex items-center">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="w-16 bg-slate-900 border border-white/10 text-white rounded-lg px-2 py-1 text-xs font-bold text-center focus:outline-none focus:border-blue-500">
-                                    <button type="submit" class="ml-1 text-blue-400 hover:text-blue-300 text-sm p-1" title="Update jumlah">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                    </button>
-                                </form>
+                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-4">
+                                <div class="flex items-center bg-slate-900 border border-white/10 rounded-xl overflow-hidden p-0.5">
+                                    <form action="{{ route('cart.update', $item->id) }}" method="POST" class="inline m-0">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="action" value="decrease">
+                                        <button type="submit" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-white/5 transition rounded-lg text-xs font-bold">
+                                            <i class="bi bi-dash-lg"></i>
+                                        </button>
+                                    </form>
 
-                                <form action="{{ route('cart.delete', $item->id) }}" method="POST" class="inline">
+                                    <span class="w-10 text-center text-xs font-black text-white">
+                                        {{ $item->quantity }}
+                                    </span>
+
+                                    <form action="{{ route('cart.update', $item->id) }}" method="POST" class="inline m-0">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="action" value="increase">
+                                        <button type="submit" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-blue-400 hover:bg-white/5 transition rounded-lg text-xs font-bold" {{ $item->quantity >= $item->product->stock ? 'disabled' : '' }}>
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <form action="{{ route('cart.delete', $item->id) }}" method="POST" class="inline m-0">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-400 hover:text-red-300 bg-red-500/10 p-2 rounded-xl border border-red-500/20 text-xs transition">
+                                    <button type="submit" class="text-red-400 hover:text-red-300 bg-red-500/10 p-2 rounded-xl border border-red-500/20 text-xs transition" title="Hapus dari keranjang">
                                         <i class="bi bi-trash3"></i>
                                     </button>
                                 </form>
@@ -111,10 +125,6 @@
                             <div class="flex justify-between text-slate-400">
                                 <span>Total Item</span>
                                 <span class="text-white font-bold">{{ $cartItems->sum('quantity') }} Unit</span>
-                            </div>
-                            <div class="flex justify-between text-slate-400">
-                                <span>Pengiriman</span>
-                                <span class="text-emerald-400 font-bold uppercase tracking-wider text-xs">Gratis Ongkir</span>
                             </div>
                         </div>
 
@@ -136,10 +146,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         @if(session('success'))
-            Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", showConfirmButton: false, timer: 2000, background: '#1e293b', customClass: { popup: 'rounded-4 border border-secondary text-white', title: 'text-white' } });
+            Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", showConfirmButton: false, timer: 1500, background: '#1e293b', customClass: { popup: 'rounded-4 border border-secondary text-white', title: 'text-white' } });
         @endif
         @if(session('error'))
-            Swal.fire({ icon: 'error', title: 'Gagal!', text: "{{ session('error') }}", showConfirmButton: false, timer: 2500, background: '#1e293b', customClass: { popup: 'rounded-4 border border-secondary text-white', title: 'text-white' } });
+            Swal.fire({ icon: 'error', title: 'Gagal!', text: "{{ session('error') }}", showConfirmButton: false, timer: 2000, background: '#1e293b', customClass: { popup: 'rounded-4 border border-secondary text-white', title: 'text-white' } });
         @endif
     </script>
 </body>

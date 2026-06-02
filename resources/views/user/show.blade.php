@@ -91,10 +91,12 @@
 
                 <div class="pt-6 border-t border-white/10 mt-auto">
                     <div class="grid grid-cols-2 gap-4">
-                        <button type="button" class="w-full inline-flex items-center justify-center gap-2 border border-white/10 text-slate-200 font-bold py-4 px-6 rounded-2xl hover:bg-white/10 hover:text-white transition text-sm">
-                            <i class="bi bi-cart-plus text-base"></i> + Masuk Keranjang
-                        </button>
-                        
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 border border-white/10 text-slate-200 font-bold py-4 px-6 rounded-2xl hover:bg-white/10 hover:text-white transition text-sm">
+                                <i class="bi bi-cart-plus text-base"></i> + Masuk Keranjang
+                            </button>
+                        </form>
                         <button type="button" class="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-2xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/20 text-center text-sm">
                             Beli Sekarang
                         </button>

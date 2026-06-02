@@ -42,7 +42,7 @@
         <div class="topbar">
             <div>
                 <h4 class="m-0 fw-bold">Inventory Produk</h4>
-                <small class="text-muted">Kelola produk dan stok toko di sini</small>
+                <small class="text-white">Kelola produk dan stok toko di sini</small>
             </div>
             <div>
                 <span class="badge bg-secondary px-3 py-2 rounded-pill">Status: Admin Aktif</span>

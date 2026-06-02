@@ -42,7 +42,7 @@
         <div class="topbar">
             <div>
                 <h4 class="m-0 fw-bold">Panel Kontrol Utama</h4>
-                <small class="text-muted">Kelola produk dan pantau statistik penjualan gadget</small>
+                <small class="text-white">Kelola produk dan pantau statistik penjualan gadget</small>
             </div>
             <div>
                 <span class="badge bg-secondary px-3 py-2 rounded-pill">Status: Admin Aktif</span>
@@ -56,28 +56,28 @@
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Total Produk</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Total Produk</h6>
                             <i class="bi bi-box text-primary fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0">120</h2>
+                        <h2 class="fw-bold display-6 m-0">-</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
                             <i class="bi bi-currency-dollar text-success fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0 text-success">Rp 2.500.000</h2>
+                        <h2 class="fw-bold display-6 m-0 text-success">Rp -</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
                             <i class="bi bi-cart-check text-info fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0 text-info">18</h2>
+                        <h2 class="fw-bold display-6 m-0 text-info">-</h2>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
                     <div>
                         <h4 class="fw-bold mb-2">Selamat Datang 👋</h4>
-                        <p class="text-muted mb-0">Kelola semua data produk dan pantau performa toko dengan tampilan modern.</p>
+                        <p class="text-white mb-0">Kelola semua data produk dan pantau performa toko dengan tampilan modern.</p>
                     </div>
                     <a href="{{ route('products.index') }}" class="btn-modern">
                         Kelola Produk

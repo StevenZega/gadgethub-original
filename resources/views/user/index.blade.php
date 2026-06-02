@@ -96,9 +96,12 @@
 
                         <div class="p-4 pt-4 mt-3">
                             <div class="grid grid-cols-1 gap-2">
-                                <button type="button" class="w-full flex items-center justify-center gap-1.5 border border-white/10 text-slate-300 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-white/10 hover:text-white transition">
-                                    <i class="bi bi-cart-plus"></i> + Keranjang
-                                </button>
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full flex items-center justify-center gap-1.5 border border-white/10 text-slate-300 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-white/10 hover:text-white transition">
+                                        <i class="bi bi-cart-plus"></i> + Keranjang
+                                    </button>
+                                </form>
                                 <button type="button" class="w-full bg-blue-600 text-white font-bold py-2 px-3 rounded-xl text-xs hover:bg-blue-700 transition shadow-md shadow-blue-600/10">
                                     Checkout
                                 </button>

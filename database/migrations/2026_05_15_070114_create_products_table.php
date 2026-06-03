@@ -13,11 +13,32 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
         $table->id();
+
         $table->string('name');
         $table->text('description')->nullable();
+
+        $table->string('category');
+        $table->string('brand');
+
         $table->integer('price');
         $table->integer('stock')->default(0);
+
         $table->string('image')->nullable();
+
+        // Umum
+        $table->integer('ram')->nullable();
+        $table->integer('storage')->nullable();
+
+        // Hape
+        $table->integer('battery_capacity')->nullable();
+        $table->string('processor')->nullable();
+        $table->string('rear_camera')->nullable();
+        $table->string('screen_size')->nullable();
+
+        // Laptop
+        $table->string('os')->nullable();
+        $table->string('vga')->nullable();
+
         $table->timestamps();
     });
     }

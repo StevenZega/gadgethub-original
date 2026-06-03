@@ -17,6 +17,12 @@
         .topbar { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(16px); border-radius: 28px; padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
         .card-modern { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(16px); border-radius: 28px; padding: 28px; box-shadow: 0 15px 40px rgba(0,0,0,0.25); transition: transform 0.3s ease; }
         .card-modern:hover { transform: translateY(-5px); border-color: rgba(59, 130, 246, 0.4); }
+        .spec-input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; border-radius: 12px;}
+        .spec-input option { background: #1e293b !important; color: white !important;} 
+        .spec-input:focus { background: rgba(255,255,255,0.08) !important; color: white !important; border-color: #3b82f6 !important; box-shadow: 0 0 0 0.2rem rgba(59,130,246,.25);}
+        .spec-input::placeholder { color: rgba(255,255,255,0.5);}
+        .spec-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px; margin-top: 20px;}
+        .spec-title { color: white; font-weight: 600; margin-bottom: 20px;}
         .btn-modern { background: linear-gradient(135deg, #2563eb, #06b6d4); border: none; color: white; padding: 12px 24px; border-radius: 16px; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
         .btn-modern:hover { opacity: 0.9; transform: scale(1.02); color: white; }
     </style>
@@ -60,28 +66,28 @@
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Total Produk</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Total Produk</h6>
                             <i class="bi bi-box text-primary fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0">120</h2>
+                        <h2 class="fw-bold display-6 m-0">-</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
                             <i class="bi bi-currency-dollar text-success fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0 text-success">Rp 2.500.000</h2>
+                        <h2 class="fw-bold display-6 m-0 text-success">Rp -</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
                             <i class="bi bi-cart-check text-info fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0 text-info">18</h2>
+                        <h2 class="fw-bold display-6 m-0 text-info">-</h2>
                     </div>
                 </div>
             </div>
@@ -90,7 +96,7 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
                     <div>
                         <h4 class="fw-bold mb-2">Selamat Datang 👋</h4>
-                        <p class="text-muted mb-0">Kelola semua data produk dan pantau performa toko dengan tampilan modern.</p>
+                        <p class="text-white mb-0">Kelola semua data produk dan pantau performa toko dengan tampilan modern.</p>
                     </div>
                     <a href="{{ route('products.index') }}" class="btn-modern">
                         Kelola Produk

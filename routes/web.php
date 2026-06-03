@@ -16,6 +16,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('/search-products', [HomeController::class, 'searchProducts'])->name('products.search');
 
 Route::get('/dashboard', function () {
     if (!auth()->check()) {

@@ -8,7 +8,7 @@
         </a>
     </div>
 
-    <div class="card border-0 shadow-sm overflow-hidden bg-white" style="border-radius: 15px;">
+    <div class="card-modern overflow-hidden" style="border-radius: 15px;">
         <div class="row g-0 d-flex align-items-stretch">
             
             <div class="col-md-5 d-flex">
@@ -20,11 +20,11 @@
             
             <div class="col-md-7">
                 <div class="card-body p-4">
-                    <h1 class="fw-bold mb-3 text-dark">{{ $product->name }}</h1>
+                    <h1 class="fw-bold mb-3 text-white">{{ $product->name }}</h1>
 
                     <div class="mb-4">
                         <h6 class="fw-bold text-muted small">Deskripsi Produk</h6>
-                        <p class="text-secondary">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p>
+                        <p style="color:#cbd5e1;">{{ $product->description ?? 'Tidak ada deskripsi.' }}</p>
                     </div>
 
                     <div class="d-flex align-items-center gap-4 mb-4">
@@ -55,6 +55,117 @@
                             Rp {{ number_format($product->price ?? 0, 0, ',', '.') }}
                         </h2>
                     </div>
+
+                    <div class="card-modern mt-4">
+
+                        <h5 class="fw-bold text-white mb-4">
+                            <i class="bi bi-cpu-fill text-info"></i>
+                            Spesifikasi Produk
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <small class="text-secondary">Kategori</small>
+                                <div class="text-white fw-semibold">
+                                    {{ $product->category }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <small class="text-secondary">Brand</small>
+                                <div class="text-white fw-semibold">
+                                    {{ $product->brand }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if($product->category == 'Hape')
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <small class="text-secondary">RAM</small>
+                            <div class="text-white">{{ $product->ram }} GB</div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <small class="text-secondary">Storage</small>
+                            <div class="text-white">{{ $product->storage }} GB</div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <small class="text-secondary">Baterai</small>
+                            <div class="text-white">
+                                {{ $product->battery_capacity }} mAh
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <small class="text-secondary">Processor</small>
+                            <div class="text-white">
+                                {{ $product->processor }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <small class="text-secondary">Kamera Belakang</small>
+                            <div class="text-white">
+                                {{ $product->rear_camera }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <small class="text-secondary">Ukuran Layar</small>
+                            <div class="text-white">
+                                {{ $product->screen_size }}
+                            </div>
+                        </div>
+
+                    </div>
+                    @endif
+
+                    @if($product->category == 'Laptop')
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <small class="text-secondary">RAM</small>
+                            <div class="text-white">
+                                {{ $product->ram }} GB
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <small class="text-secondary">Storage</small>
+                            <div class="text-white">
+                                {{ $product->storage }} GB
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <small class="text-secondary">OS</small>
+                            <div class="text-white">
+                                {{ $product->os }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <small class="text-secondary">Processor</small>
+                            <div class="text-white">
+                                {{ $product->processor }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <small class="text-secondary">VGA</small>
+                            <div class="text-white">
+                                {{ $product->vga }}
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="d-flex gap-2 pt-2">
                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning px-4 text-white fw-bold shadow-sm">Edit</a>

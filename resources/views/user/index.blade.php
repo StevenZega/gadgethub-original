@@ -17,6 +17,83 @@
                         GADGET<span class="text-white">HUB</span>
                     </a>
                 </div>
+                <form method="GET" action="{{ route('user.dashboard') }}" class="flex items-center gap-2">
+                    <div class="relative">
+                    <!-- Search -->
+                    <input
+                        type="text"
+                        id="search-input"
+                        name="search"
+                        placeholder="🔍 Cari produk..."
+                        value="{{ request('search') }}"
+                        class="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white w-56 focus:outline-none focus:border-blue-500">
+                        <div id="search-results"
+                            class="hidden absolute top-full left-0 mt-2 w-full bg-[#1e293b] border border-white/10 rounded-xl overflow-hidden shadow-xl z-50">
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <select
+                        name="category"
+                        class="bg-[#1e293b] border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-blue-500">
+
+                        <option value="">📂 Semua</option>
+
+                        <option value="Hape"
+                            {{ request('category') == 'Hape' ? 'selected' : '' }}>
+                            📱 Hape
+                        </option>
+
+                        <option value="Laptop"
+                            {{ request('category') == 'Laptop' ? 'selected' : '' }}>
+                            💻 Laptop
+                        </option>
+
+                    </select>
+
+                    <!-- Sort -->
+                    <select
+                        name="sort"
+                        class="bg-[#1e293b] border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-blue-500">
+
+                        <option value="">↕ Urutkan</option>
+
+                        <option value="price_asc"
+                            {{ request('sort') == 'price_asc' ? 'selected' : '' }}>
+                            💰 Harga Termurah
+                        </option>
+
+                        <option value="price_desc"
+                            {{ request('sort') == 'price_desc' ? 'selected' : '' }}>
+                            💎 Harga Termahal
+                        </option>
+
+                        <option value="name_asc"
+                            {{ request('sort') == 'name_asc' ? 'selected' : '' }}>
+                            🔤 Nama A-Z
+                        </option>
+
+                        <option value="name_desc"
+                            {{ request('sort') == 'name_desc' ? 'selected' : '' }}>
+                            🔠 Nama Z-A
+                        </option>
+
+                    </select>
+
+                    <!-- Filter Button -->
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl font-semibold transition">
+                        <i class="bi bi-funnel-fill"></i>
+                    </button>
+
+                    <!-- Reset -->
+                    <a href="{{ route('user.dashboard') }}"
+                    class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl transition">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+
+                </form>            
                 <div class="flex items-center space-x-6">
                     <a href="{{ route('cart.index') }}" class="text-slate-400 hover:text-blue-400 text-xl p-1.5 transition flex items-center relative group" title="Buka Keranjang">
                         <i class="bi bi-cart-fill"></i>
@@ -65,6 +142,22 @@
                 <p class="text-xs text-slate-400 mt-0.5">Menampilkan deretan device spesifikasi terbaik</p>
             </div>
         </div>
+
+        @if($products->count() > 0)
+
+            @foreach($products as $product)
+                {{-- card produk --}}
+            @endforeach
+
+        @else
+
+            <div class="text-center py-5">
+                <i class="bi bi-search fs-1"></i>
+                <h4 class="mt-3">Produk tidak ditemukan</h4>
+                <p>Coba gunakan kata kunci lain.</p>
+            </div>
+
+        @endif
 
         @if($products->isEmpty())
             <div class="text-center py-20 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm">
@@ -124,6 +217,55 @@
             &copy; {{ date('Y') }} GADGETHUB INDONESIA. All rights reserved.
         </div>
     </footer>
+
+    <script>
+const searchInput = document.getElementById('search-input');
+const resultsBox = document.getElementById('search-results');
+
+searchInput.addEventListener('keyup', async function() {
+
+    let keyword = this.value;
+
+    if(keyword.length < 1){
+        resultsBox.classList.add('hidden');
+        return;
+    }
+
+    let response = await fetch(`/search-products?search=${keyword}`);
+    let products = await response.json();
+
+    let html = '';
+
+    products.forEach(product => {
+        html += `
+            <a href="/user/products/${product.id}"
+               class="block px-4 py-3 hover:bg-white/5 border-b border-white/5">
+
+                <div class="font-semibold text-white">
+                    ${product.name}
+                </div>
+
+                <div class="text-xs text-slate-400">
+                    ${product.brand ?? ''}
+                </div>
+
+            </a>
+        `;
+    });
+
+    if(products.length === 0){
+        html = `
+            <div class="px-4 py-3 text-slate-400">
+                Produk tidak ditemukan
+            </div>
+        `;
+    }
+
+    resultsBox.innerHTML = html;
+    resultsBox.classList.remove('hidden');
+    
+});
+</script>
 
 </body>
 </html>

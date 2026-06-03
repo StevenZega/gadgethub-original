@@ -66,8 +66,7 @@
                         </label>
 
                         <select name="category" id="category"
-                            class="form-select spec-input"
-                            style="background: rgba(0, 0, 0, 0.05); border-color: rgba(0, 0, 0, 0.1);">
+                            class="form-select text-white" style="background: #1e293b; border-color: rgba(255,255,255,0.1);">
                             <option value="Hape">Hape</option>
                             <option value="Laptop">Laptop</option>
                         </select>
@@ -107,7 +106,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-slate-300">Processor</label>
-                                <input type="text" name="phone_processor" class="form-control spec-input">
+                                <input type="text" name="phone_processor" value="" class="form-control spec-input">
                             </div>
 
                             <div class="col-md-6 mb-3">

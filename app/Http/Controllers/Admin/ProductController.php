@@ -53,6 +53,10 @@ class ProductController extends Controller
             'vga'                 => 'nullable|string',
         ]);
 
+        $data['processor'] =
+    $request->phone_processor ?: $request->laptop_processor;
+
+
         try {
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('products', 'public');
@@ -86,7 +90,7 @@ class ProductController extends Controller
 
             'description' => 'required|string',
 
-            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
 
             'ram'                 => 'nullable|integer',
             'storage'             => 'nullable|integer',
@@ -99,6 +103,9 @@ class ProductController extends Controller
             'os'                  => 'nullable|string',
             'vga'                 => 'nullable|string',
         ]);
+
+        $data['processor'] =
+    $request->phone_processor ?: $request->laptop_processor;
 
         try {
             if ($request->hasFile('image')) {

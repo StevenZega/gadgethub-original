@@ -30,20 +30,27 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'description' => 'nullable',
-            'image' => 'nullable|image'
+            'name'        => 'required|string|max:255',
+            'price'       => 'required|integer|min:0',
+            'stock'       => 'required|integer|min:0',
+            'description' => 'required|string',
+            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048' // Wajib diisi untuk produk baru
         ]);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+        try {
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            Product::create($data);
+
+            return redirect()->route('products.index')->with('success', 'Product created successfully!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error_gagal' => 'Gagal menyimpan produk: ' . $e->getMessage()]);
         }
-
-        Product::create($data);
-
-        return redirect()->route('products.index')->with('success', 'Product created!');
     }
 
     public function edit(Product $product)
@@ -54,33 +61,45 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'description' => 'nullable',
-            'image' => 'nullable|image'
+            'name'        => 'required|string|max:255',
+            'price'       => 'required|integer|min:0',
+            'stock'       => 'required|integer|min:0',
+            'description' => 'required|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+        try {
+            if ($request->hasFile('image')) {
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $data['image'] = $request->file('image')->store('products', 'public');
             }
-            $data['image'] = $request->file('image')->store('products', 'public');
+
+            $product->update($data);
+
+            return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error_gagal' => 'Gagal memperbarui produk: ' . $e->getMessage()]);
         }
-
-        $product->update($data);
-
-        return redirect()->route('products.index')->with('success', 'Product updated!');
     }
 
     public function destroy(Product $product)
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        try {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            $product->delete();
+
+            return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
+            
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
-
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Product deleted!');
     }
 }

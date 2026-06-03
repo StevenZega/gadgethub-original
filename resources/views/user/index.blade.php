@@ -18,6 +18,11 @@
                     </a>
                 </div>
                 <div class="flex items-center space-x-6">
+                    <a href="{{ route('cart.index') }}" class="text-slate-400 hover:text-blue-400 text-xl p-1.5 transition flex items-center relative group" title="Buka Keranjang">
+                        <i class="bi bi-cart-fill"></i>
+                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
+                    </a>
+
                     <span class="text-sm text-slate-400">
                         <i class="bi bi-person-circle text-blue-400 mr-1.5"></i> Halo, <strong class="text-white">{{ auth()->user()->name }}</strong>
                     </span>
@@ -96,9 +101,12 @@
 
                         <div class="p-4 pt-4 mt-3">
                             <div class="grid grid-cols-1 gap-2">
-                                <button type="button" class="w-full flex items-center justify-center gap-1.5 border border-white/10 text-slate-300 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-white/10 hover:text-white transition">
-                                    <i class="bi bi-cart-plus"></i> + Keranjang
-                                </button>
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full flex items-center justify-center gap-1.5 border border-white/10 text-slate-300 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-white/10 hover:text-white transition">
+                                        <i class="bi bi-cart-plus"></i> + Keranjang
+                                    </button>
+                                </form>
                                 <button type="button" class="w-full bg-blue-600 text-white font-bold py-2 px-3 rounded-xl text-xs hover:bg-blue-700 transition shadow-md shadow-blue-600/10">
                                     Checkout
                                 </button>

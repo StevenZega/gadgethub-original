@@ -27,70 +27,79 @@
         <div class="brand">
             <i class="bi bi-phone-vibrate text-primary"></i> GadgetHub Admin
         </div>
-        <a href="{{ url('/admin/dashboard') }}" class="nav-link active">
+        <a href="{{ url('/admin/dashboard') }}" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
-        <a href="{{ route('products.index') }}" class="nav-link">
+        <a href="{{ route('products.index') }}" class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
             <i class="bi bi-box-seam-fill"></i> Produk
         </a>
         <a href="#" class="nav-link">
             <i class="bi bi-bar-chart-line-fill"></i> Statistik
-        </a>
+        <a href="{{ route('promos.index') }}"
+                class="nav-link {{ Request::is('admin/promos*') ? 'active' : '' }}">
+            <i class="bi bi-percent"></i> Promo
+</a>
+    </a>
     </div>
 
     <div class="main-content">
         <div class="topbar">
             <div>
-                <h4 class="m-0 fw-bold">Dashboard Penjualan</h4>
-                <small class="text-muted">Kelola produk dan penjualan dengan mudah</small>
+                <h4 class="m-0 fw-bold">Panel Kontrol Utama</h4>
+                <small class="text-muted">Kelola produk dan pantau statistik penjualan gadget</small>
             </div>
             <div>
                 <span class="badge bg-secondary px-3 py-2 rounded-pill">Status: Admin Aktif</span>
             </div>
         </div>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="card-modern">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Total Produk</h6>
-                        <i class="bi bi-box text-primary fs-4"></i>
+        @if(View::hasSection('content'))
+            @yield('content')
+        @else
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card-modern">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Total Produk</h6>
+                            <i class="bi bi-box text-primary fs-4"></i>
+                        </div>
+                        <h2 class="fw-bold display-6 m-0">120</h2>
                     </div>
-                    <h2 class="fw-bold display-6 m-0">120</h2>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-modern">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
+                            <i class="bi bi-currency-dollar text-success fs-4"></i>
+                        </div>
+                        <h2 class="fw-bold display-6 m-0 text-success">Rp 2.500.000</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-modern">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
+                            <i class="bi bi-cart-check text-info fs-4"></i>
+                        </div>
+                        <h2 class="fw-bold display-6 m-0 text-info">18</h2>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card-modern">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
-                        <i class="bi bi-currency-dollar text-success fs-4"></i>
-                    </div>
-                    <h2 class="fw-bold display-6 m-0 text-success">Rp 2.500.000</h2>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card-modern">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-muted text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
-                        <i class="bi bi-cart-check text-info fs-4"></i>
-                    </div>
-                    <h2 class="fw-bold display-6 m-0 text-info">18</h2>
-                </div>
-            </div>
-        </div>
 
-        <div class="card-modern">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
-                <div>
-                    <h4 class="fw-bold mb-2">Selamat Datang 👋</h4>
-                    <p class="text-muted mb-0">Kelola semua data produk dan pantau performa toko dengan tampilan modern.</p>
+            <div class="card-modern">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
+                    <div>
+                        <h4 class="fw-bold mb-2">Selamat Datang 👋</h4>
+                        <p class="text-muted mb-0">Kelola semua data produk dan pantau performa toko dengan tampilan modern.</p>
+                    </div>
+                    <a href="{{ route('products.index') }}" class="btn-modern">
+                        Kelola Produk
+                    </a>
                 </div>
-                <a href="{{ route('products.index') }}" class="btn-modern">
-                    Kelola Produk
-                </a>
             </div>
-        </div>
+        @endif
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

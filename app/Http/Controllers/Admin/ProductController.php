@@ -31,10 +31,26 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name'        => 'required|string|max:255',
+            'category'    => 'required|string',
+            'brand'       => 'required|string',
+
             'price'       => 'required|integer|min:0',
             'stock'       => 'required|integer|min:0',
+
             'description' => 'required|string',
-            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048' // Wajib diisi untuk produk baru
+
+            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+
+            'ram'                 => 'nullable|integer',
+            'storage'             => 'nullable|integer',
+            'battery_capacity'    => 'nullable|integer',
+
+            'processor'           => 'nullable|string',
+            'rear_camera'         => 'nullable|string',
+            'screen_size'         => 'nullable|string',
+
+            'os'                  => 'nullable|string',
+            'vga'                 => 'nullable|string',
         ]);
 
         try {
@@ -61,11 +77,27 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255',
+                        'name'        => 'required|string|max:255',
+            'category'    => 'required|string',
+            'brand'       => 'required|string',
+
             'price'       => 'required|integer|min:0',
             'stock'       => 'required|integer|min:0',
+
             'description' => 'required|string',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
+
+            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+
+            'ram'                 => 'nullable|integer',
+            'storage'             => 'nullable|integer',
+            'battery_capacity'    => 'nullable|integer',
+
+            'processor'           => 'nullable|string',
+            'rear_camera'         => 'nullable|string',
+            'screen_size'         => 'nullable|string',
+
+            'os'                  => 'nullable|string',
+            'vga'                 => 'nullable|string',
         ]);
 
         try {

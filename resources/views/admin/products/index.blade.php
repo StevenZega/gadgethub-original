@@ -5,7 +5,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="fw-bold m-0 text-white">Data Produk Gadget</h3>
-            <p class="text-penjelas small mb-0">Total inventaris unit toko Anda saat ini.</p>
+
+            <p class="small mb-0 text-white">Total inventaris unit toko Anda saat ini.</p>
         </div>
         <a href="{{ route('products.create') }}" class="btn-modern px-4 py-2.5 d-inline-flex align-items-center fw-semibold text-decoration-none" style="background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 12px; gap: 8px;">
             <i class="bi bi-plus-lg"></i> Tambah Produk
@@ -20,7 +21,7 @@
                         <th class="ps-4 py-3.5 fs-6">Produk</th>
                         <th class="py-3.5 fs-6">Harga</th>
                         <th class="py-3.5 fs-6">Stok</th>
-                        <th class="pe-4 py-3.5 fs-6 text-end" style="width: 200px;">Aksi</th>
+                        <th class="pe-4 py-3.5 fs-6 text-center" style="width: 200px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

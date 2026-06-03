@@ -1,117 +1,221 @@
 @extends('admin.dashboard')
 
 @section('content')
-<div class="container-fluid p-0">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <a href="{{ route('promos.index') }}" class="text-purple-400 text-decoration-none small d-inline-flex align-items-center mb-2 animate-hover">
-                <i class="bi bi-arrow-left me-2"></i> Kembali ke Daftar Promo
-            </a>
-            <h2 class="fw-bold m-0 text-white">Detail Aturan Promo</h2>
-            <p class="text-penjelas small mb-0">Informasi lengkap mengenai skema diskon yang sedang berjalan.</p>
-        </div>
-        <div>
-            <a href="{{ route('promos.edit', $promo->id) }}" class="btn btn-sm btn-outline-warning rounded-3 px-4 py-2 fw-medium border-opacity-50">
-                <i class="bi bi-pencil-square me-1"></i> Edit Promo
-            </a>
-        </div>
+
+<div class="mb-4">
+    <a href="{{ route('promos.index') }}"
+       class="text-decoration-none text-white bg-secondary px-3 py-2 rounded-3 d-inline-block">
+        <i class="bi bi-arrow-left"></i>
+        Kembali ke Daftar Promo
+    </a>
+</div>
+
+<div class="d-flex justify-content-between align-items-start flex-wrap mb-4">
+
+    <div>
+        <h1 class="fw-bold text-white mb-1">
+            Detail Promo
+        </h1>
+
+        <p class="text-light opacity-75">
+            Informasi lengkap mengenai promo yang sedang tersedia.
+        </p>
     </div>
 
-    <div class="row g-4">
-        <div class="col-lg-4">
-            <div class="card-modern text-center p-4 h-100 d-flex flex-column justify-content-center align-items-center" style="background: linear-gradient(145deg, #1e1b4b, #0f172a); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
-                <div class="bg-purple-500 bg-opacity-10 p-3 rounded-circle mb-3 border border-purple-500 border-opacity-25 shadow-sm">
-                    <i class="bi bi-ticket-perforated text-purple-400" style="font-size: 2.5rem;"></i>
+    <a href="{{ route('promos.edit', $promo->id) }}"
+       class="btn btn-outline-warning px-4 py-2 rounded-4">
+        <i class="bi bi-pencil-square"></i>
+        Edit Promo
+    </a>
+
+</div>
+
+<div class="row g-4">
+
+    {{-- KARTU KIRI --}}
+    <div class="col-lg-4">
+
+        <div class="promo-card-left h-100">
+
+            <div class="text-center">
+
+                <div class="promo-icon">
+                    <i class="bi bi-ticket-perforated"></i>
                 </div>
-                
-                <h2 class="text-white fw-bold mt-1 mb-2 fs-4">{{ $promo->name }}</h2>
-                
-                <div class="px-3 py-1 mb-4 rounded-3 text-purple-300 fs-7 border border-purple-500 border-opacity-35 font-monospace tracking-wider" style="background: rgba(168, 85, 247, 0.08);">
-                    CODE: {{ $promo->code }}
+
+                <h3 class="mt-4 fw-bold">
+                    {{ $promo->nama_promo }}
+                </h3>
+
+                <div class="promo-code">
+                    {{ $promo->kode_promo }}
                 </div>
-                
-                <div class="badge bg-emerald-500 bg-opacity-10 text-emerald-400 px-4 py-2.5 rounded-pill fs-5 fw-bold border border-emerald-500 border-opacity-25 shadow-sm">
-                    Potongan {{ $promo->discount_percent }}%
+
+                <div class="promo-discount">
+                    {{ $promo->diskon }}%
                 </div>
+
             </div>
+
         </div>
 
-        <div class="col-lg-8">
-            <div class="card-modern p-4 h-100" style="background: #1e293b; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
-                <h4 class="text-white fw-bold mb-4 d-inline-flex align-items-center">
-                    <i class="bi bi-gear-fill text-purple-400 me-2 animate-spin-slow"></i> Parameter Konfigurasi Aturan
-                </h4>
-                
-                <div class="table-responsive">
-                    <table class="table table-dark align-middle mb-0" style="--bs-table-bg: transparent;">
-                        <tbody>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td class="text-penjelas py-3" style="width: 200px;">Jenis Cakupan</td>
-                                <td class="py-3">: 
-                                    @if($promo->scope == 'all')
-                                        <span class="badge bg-info bg-opacity-10 text-info px-3 py-1.5 rounded-pill ms-2 border border-info border-opacity-10">Universal (All Items)</span>
-                                    @elseif($promo->scope == 'category')
-                                        <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-1.5 rounded-pill ms-2 border border-warning border-opacity-10">Per Kategori</span>
-                                    @else
-                                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1.5 rounded-pill ms-2 border border-primary border-opacity-10">Produk Spesifik</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td class="text-penjelas py-3">Target Objek Kategori / Produk</td>
-                                <td class="py-3 text-white fw-semibold">: 
-                                    <span class="ms-2">
-                                        @if($promo->scope == 'all')
-                                            Semua Katalog Inventaris Gadget
-                                        @elseif($promo->scope == 'category')
-                                            Kategori "{{ $promo->category }}"
-                                        @else
-                                            {{ $promo->product->name ?? 'Produk Tidak Ditemukan' }}
-                                        @endif
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td class="text-penjelas py-3">Tanggal Mulai</td>
-                                <td class="py-3 text-slate-300">: 
-                                    <span class="ms-2"><i class="bi bi-calendar-check text-success me-1"></i> {{ date('d F Y', strtotime($promo->start_date)) }}</span>
-                                </td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td class="text-penjelas py-3">Tanggal Kadaluarsa</td>
-                                <td class="py-3 text-slate-300">: 
-                                    <span class="ms-2"><i class="bi bi-calendar-x text-danger me-1"></i> {{ date('d F Y', strtotime($promo->end_date)) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-penjelas py-3">Status Validitas</td>
-                                <td class="py-3">: 
-                                    @php
-                                        $hariIni = now()->startOfDay();
-                                        $mulai = \Carbon\Carbon::parse($promo->start_date)->startOfDay();
-                                        $selesai = \Carbon\Carbon::parse($promo->end_date)->endOfDay();
-                                    @endphp
-                                    @if($hariIni->between($mulai, $selesai))
-                                        <span class="badge bg-success px-3 py-1.5 rounded-pill ms-2 shadow-sm"><i class="bi bi-check-circle-fill me-1"></i> Aktif Berjalan</span>
-                                    @elseif($hariIni->lessThan($mulai))
-                                        <span class="badge bg-secondary px-3 py-1.5 rounded-pill ms-2 shadow-sm"><i class="bi bi-clock-history me-1"></i> Menunggu Jadwal</span>
-                                    @else
-                                        <span class="badge bg-danger px-3 py-1.5 rounded-pill ms-2 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-1"></i> Sudah Expired</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
+
+    {{-- KARTU KANAN --}}
+    <div class="col-lg-8">
+
+        <div class="promo-card-right">
+
+            <h2 class="fw-bold mb-4">
+                <i class="bi bi-gear-fill"></i>
+                Detail Konfigurasi Promo
+            </h2>
+
+            <div class="detail-row">
+                <span>Nama Promo</span>
+                <strong>{{ $promo->nama_promo }}</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Kode Promo</span>
+                <strong>{{ $promo->kode_promo }}</strong>
+            </div>
+
+            {{-- TAMBAHAN JENIS CAKUPAN --}}
+            <div class="detail-row">
+                <span>Jenis Cakupan</span>
+
+                @if($promo->jenis_cakupan == 'all')
+
+                    <span class="badge bg-info px-3 py-2 rounded-pill">
+                        Universal
+                    </span>
+
+                @elseif($promo->jenis_cakupan == 'category')
+
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                        Per Kategori
+                    </span>
+
+                @else
+
+                    <span class="badge bg-primary px-3 py-2 rounded-pill">
+                        Produk Spesifik
+                    </span>
+
+                @endif
+            </div>
+
+            <div class="detail-row">
+                <span>Diskon</span>
+                <strong>{{ $promo->diskon }}%</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Tanggal Mulai</span>
+                <strong>
+                    {{ \Carbon\Carbon::parse($promo->tanggal_mulai)->format('d F Y') }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Tanggal Berakhir</span>
+                <strong>
+                    {{ \Carbon\Carbon::parse($promo->tanggal_selesai)->format('d F Y') }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Status Promo</span>
+
+                @if($promo->status == 'aktif')
+
+                    <span class="badge bg-success px-3 py-2 rounded-pill">
+                        Aktif
+                    </span>
+
+                @else
+
+                    <span class="badge bg-danger px-3 py-2 rounded-pill">
+                        Nonaktif
+                    </span>
+
+                @endif
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <style>
-    .animate-hover { transition: all 0.2s ease; }
-    .animate-hover:hover { color: #c084fc !important; transform: translateX(-3px); }
-    @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .animate-spin-slow { animation: spin-slow 8s linear infinite; }
+
+.promo-card-left{
+    background: linear-gradient(180deg,#221b5a,#0c173c);
+    border-radius:28px;
+    padding:50px 30px;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.promo-card-right{
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(20px);
+    border-radius:28px;
+    padding:35px;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.promo-icon{
+    width:120px;
+    height:120px;
+    margin:auto;
+    border:2px solid rgba(255,255,255,.7);
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:50px;
+    color:white;
+}
+
+.promo-code{
+    display:inline-block;
+    margin-top:25px;
+    border:1px solid rgba(255,255,255,.6);
+    border-radius:14px;
+    padding:10px 25px;
+    font-weight:700;
+    color:white;
+}
+
+.promo-discount{
+    margin-top:25px;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:40px;
+    padding:12px 30px;
+    font-size:28px;
+    font-weight:700;
+    color:white;
+}
+
+.detail-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.detail-row span{
+    font-size:18px;
+}
+
+.detail-row strong{
+    font-size:18px;
+}
+
 </style>
+
 @endsection

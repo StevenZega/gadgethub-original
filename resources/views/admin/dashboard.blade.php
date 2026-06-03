@@ -54,7 +54,7 @@
         </a>
         
         <a href="{{ route('promos.index') }}" class="nav-link {{ Request::is('admin/promos*') ? 'active' : '' }}">
-            <i class="bi bi-ticket-perforated-fill"></i> Manajemen Promo
+            <i class="bi bi-ticket-perforated-fill"></i> Promo
         </a>
 
         <a href="#" class="nav-link">

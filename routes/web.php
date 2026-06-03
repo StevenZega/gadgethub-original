@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\PromoController;
@@ -38,6 +39,7 @@ Route::get('/user/products/{id}', [HomeController::class, 'show'])->middleware('
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('products', ProductController::class);
+    Route::resource('promos', PromoController::class);
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -61,6 +61,102 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="category" class="form-label fw-semibold text-slate-300">
+                            Kategori
+                        </label>
+
+                        <select name="category" id="category"
+                            class="form-select spec-input"
+                            style="background: rgba(0, 0, 0, 0.05); border-color: rgba(0, 0, 0, 0.1);">
+                            <option value="Hape">Hape</option>
+                            <option value="Laptop">Laptop</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="brand" class="form-label fw-semibold text-slate-300">
+                            Brand
+                        </label>
+
+                        <input type="text"
+                            name="brand"
+                            id="brand"
+                            class="form-control spec-input"
+                            style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">
+                    </div>
+
+                    <div id="phone-specs" class="spec-card" style="display:none;">
+                        <h5 class="text-white mt-4 mb-3">
+                            📱 Spesifikasi Hape
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">RAM (GB)</label>
+                                <input type="number" name="ram" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Storage (GB)</label>
+                                <input type="number" name="storage" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Kapasitas Baterai (mAh)</label>
+                                <input type="number" name="battery_capacity" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Processor</label>
+                                <input type="text" name="phone_processor" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Kamera Belakang</label>
+                                <input type="text" name="rear_camera" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Ukuran Layar</label>
+                                <input type="text" name="screen_size" class="form-control spec-input">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="laptop-specs" class="spec-card" style="display:none;">
+                        <h5 class="text-white mt-4 mb-3">
+                            💻 Spesifikasi Laptop
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">RAM (GB)</label>
+                                <input type="number" name="ram" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Storage (GB)</label>
+                                <input type="number" name="storage" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">Operating System</label>
+                                <input type="text" name="os" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-slate-300">VGA</label>
+                                <input type="text" name="vga" class="form-control spec-input">
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label text-slate-300">Processor</label>
+                                <input type="text" name="laptop_processor" class="form-control spec-input">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="description" class="form-label fw-semibold text-slate-300">Deskripsi Produk</label>
                         <textarea name="description" class="form-control text-white @error('description') is-invalid @enderror" id="description" rows="5" required style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">{{ old('description') }}</textarea>
                         @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -95,20 +191,47 @@
 
 <script>
     function previewImg() {
-        const image = document.querySelector('#image');
-        const imgPreview = document.querySelector('#image-preview');
-        const placeholder = document.querySelector('#placeholder-icon');
+    const image = document.querySelector('#image');
+    const imgPreview = document.querySelector('#image-preview');
+    const placeholder = document.querySelector('#placeholder-icon');
 
-        if (image.files && image.files[0]) {
-            const oFReader = new FileReader();
-            oFReader.readAsDataURL(image.files[0]);
+    if (image.files && image.files[0]) {
 
-            oFReader.onload = function(oFREvent) {
-                placeholder.style.display = 'none';
-                imgPreview.style.display = 'block';
-                imgPreview.src = oFREvent.target.result;
+        const oFReader = new FileReader();
+
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+
+            placeholder.style.display = 'none';
+            imgPreview.style.display = 'block';
+            imgPreview.src = oFREvent.target.result;
+
             }
         }
     }
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const categorySelect = document.getElementById('category');
+    const phoneSpecs = document.getElementById('phone-specs');
+    const laptopSpecs = document.getElementById('laptop-specs');
+
+    categorySelect.addEventListener('change', function () {
+
+        phoneSpecs.style.display = 'none';
+        laptopSpecs.style.display = 'none';
+
+        if (this.value === 'Hape') {
+            phoneSpecs.style.display = 'block';
+        }
+
+        if (this.value === 'Laptop') {
+            laptopSpecs.style.display = 'block';
+        }
+
+    });
+
+});
 </script>
 @endsection

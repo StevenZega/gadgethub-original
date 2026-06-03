@@ -46,7 +46,7 @@
         <div class="topbar">
             <div>
                 <h4 class="m-0 fw-bold">Panel Kontrol Utama</h4>
-                <small class="text-muted">Kelola produk dan pantau statistik penjualan gadget</small>
+                <small class="fw-bold mb-1">Kelola produk dan pantau statistik penjualan gadget</small>
             </div>
             <div>
                 <span class="badge bg-secondary px-3 py-2 rounded-pill">Status: Admin Aktif</span>

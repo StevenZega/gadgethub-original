@@ -38,6 +38,10 @@
                 <tr>
                     <th>Nama Promo</th>
                     <th>Kode Promo</th>
+
+                    {{-- TAMBAHAN JENIS CAKUPAN --}}
+                    <th>Jenis Cakupan</th>
+
                     <th>Diskon</th>
                     <th>Status</th>
                     <th>Tanggal Mulai</th>
@@ -50,7 +54,9 @@
 
                 @forelse($promos as $promo)
 
-                    <tr>
+                    <tr
+                        onclick="window.location.href='{{ route('promos.show', $promo->id) }}'"
+                        style="cursor:pointer;">
 
                         <td>
                             <strong>
@@ -64,6 +70,31 @@
                             </span>
                         </td>
 
+                        {{-- TAMBAHAN JENIS CAKUPAN --}}
+                        <td>
+
+                            @if($promo->jenis_cakupan == 'all')
+
+                                <span class="badge bg-info px-3 py-2 rounded-pill">
+                                    Universal
+                                </span>
+
+                            @elseif($promo->jenis_cakupan == 'category')
+
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                    Per Kategori
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-primary px-3 py-2 rounded-pill">
+                                    Produk Spesifik
+                                </span>
+
+                            @endif
+
+                        </td>
+
                         <td>
                             <span class="badge bg-primary">
                                 {{ $promo->diskon }}%
@@ -71,7 +102,6 @@
                         </td>
 
                         <td>
-
                             @if($promo->status == 'aktif')
 
                                 <span class="badge bg-success">
@@ -85,7 +115,6 @@
                                 </span>
 
                             @endif
-
                         </td>
 
                         <td>
@@ -99,21 +128,25 @@
                         <td>
 
                             <a href="{{ route('promos.edit', $promo->id) }}"
-                               class="btn btn-warning btn-sm">
+                               class="btn btn-warning btn-sm"
+                               onclick="event.stopPropagation()">
+
                                 <i class="bi bi-pencil-square"></i>
                                 Edit
+
                             </a>
 
                             <form action="{{ route('promos.destroy', $promo->id) }}"
                                   method="POST"
-                                  class="d-inline">
+                                  class="d-inline"
+                                  onclick="event.stopPropagation()">
 
                                 @csrf
                                 @method('DELETE')
 
                                 <button type="submit"
                                         class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Yakin ingin menghapus promo ini?')">
+                                        onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus promo ini?')">
 
                                     <i class="bi bi-trash"></i>
                                     Hapus
@@ -129,7 +162,7 @@
                 @empty
 
                     <tr>
-                        <td colspan="7" class="text-center py-4">
+                        <td colspan="8" class="text-center py-4">
                             Belum ada data promo.
                         </td>
                     </tr>
@@ -143,6 +176,5 @@
     </div>
 
 </div>
-
 
 @endsection

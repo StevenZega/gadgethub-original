@@ -103,130 +103,159 @@
 
 <div class="promo-card">
 
-    <div class="promo-header">
-        <div>
-            <h2 class="promo-title">
-                <i class="bi bi-pencil-square text-warning"></i>
-                Edit Promo
-            </h2>
+```
+<div class="promo-header">
+    <div>
+        <h2 class="promo-title">
+            <i class="bi bi-pencil-square text-warning"></i>
+            Edit Promo
+        </h2>
 
-            <div class="promo-subtitle">
-                Perbarui data promo yang sudah ada.
-            </div>
+        <div class="promo-subtitle">
+            Perbarui data promo yang sudah ada.
         </div>
     </div>
+</div>
 
-    <div class="promo-body">
+<div class="promo-body">
 
-        <form action="{{ route('promos.update', $promo->id) }}"
-              method="POST">
+    <form action="{{ route('promos.update', $promo->id) }}"
+          method="POST">
 
-            @csrf
-            @method('PUT')
+        @csrf
+        @method('PUT')
 
-            <div class="row">
+        <div class="row">
 
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">
-                        Nama Promo
-                    </label>
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Nama Promo
+                </label>
 
-                    <input
-                        type="text"
-                        name="nama_promo"
-                        class="form-control modern-input"
-                        value="{{ $promo->nama_promo }}">
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">
-                        Kode Promo
-                    </label>
-
-                    <input
-                        type="text"
-                        name="kode_promo"
-                        class="form-control modern-input"
-                        value="{{ $promo->kode_promo }}">
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">
-                        Diskon (%)
-                    </label>
-
-                    <input
-                        type="number"
-                        name="diskon"
-                        class="form-control modern-input"
-                        value="{{ $promo->diskon }}">
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">
-                        Status Promo
-                    </label>
-
-                    <select
-                        name="status"
-                        class="form-select modern-input">
-
-                        <option value="aktif"
-                            {{ $promo->status == 'aktif' ? 'selected' : '' }}>
-                            Aktif
-                        </option>
-
-                        <option value="nonaktif"
-                            {{ $promo->status == 'nonaktif' ? 'selected' : '' }}>
-                            Nonaktif
-                        </option>
-
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">
-                        Tanggal Mulai
-                    </label>
-
-                    <input
-                        type="date"
-                        name="tanggal_mulai"
-                        class="form-control modern-input"
-                        value="{{ $promo->tanggal_mulai }}">
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">
-                        Tanggal Selesai
-                    </label>
-
-                    <input
-                        type="date"
-                        name="tanggal_selesai"
-                        class="form-control modern-input"
-                        value="{{ $promo->tanggal_selesai }}">
-                </div>
-
+                <input
+                    type="text"
+                    name="nama_promo"
+                    class="form-control modern-input"
+                    value="{{ $promo->nama_promo }}">
             </div>
 
-            <div class="mt-4">
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Kode Promo
+                </label>
 
-                <a href="{{ route('promos.index') }}"
-                   class="btn btn-secondary">
-                    Kembali
-                </a>
-
-                <button type="submit"
-                        class="btn btn-primary">
-                    Update Promo
-                </button>
-
+                <input
+                    type="text"
+                    name="kode_promo"
+                    class="form-control modern-input"
+                    value="{{ $promo->kode_promo }}">
             </div>
 
-        </form>
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Jenis Cakupan
+                </label>
 
-    </div>
+                <select
+                    name="jenis_cakupan"
+                    class="form-select modern-input">
+
+                    <option value="all"
+                        {{ $promo->jenis_cakupan == 'all' ? 'selected' : '' }}>
+                        Universal
+                    </option>
+
+                    <option value="category"
+                        {{ $promo->jenis_cakupan == 'category' ? 'selected' : '' }}>
+                        Per Kategori
+                    </option>
+
+                    <option value="specific"
+                        {{ $promo->jenis_cakupan == 'specific' ? 'selected' : '' }}>
+                        Produk Spesifik
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Diskon (%)
+                </label>
+
+                <input
+                    type="number"
+                    name="diskon"
+                    class="form-control modern-input"
+                    value="{{ $promo->diskon }}">
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Status Promo
+                </label>
+
+                <select
+                    name="status"
+                    class="form-select modern-input">
+
+                    <option value="aktif"
+                        {{ $promo->status == 'aktif' ? 'selected' : '' }}>
+                        Aktif
+                    </option>
+
+                    <option value="nonaktif"
+                        {{ $promo->status == 'nonaktif' ? 'selected' : '' }}>
+                        Nonaktif
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Tanggal Mulai
+                </label>
+
+                <input
+                    type="date"
+                    name="tanggal_mulai"
+                    class="form-control modern-input"
+                    value="{{ $promo->tanggal_mulai }}">
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    Tanggal Selesai
+                </label>
+
+                <input
+                    type="date"
+                    name="tanggal_selesai"
+                    class="form-control modern-input"
+                    value="{{ $promo->tanggal_selesai }}">
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+
+            <a href="{{ route('promos.index') }}"
+               class="btn btn-secondary">
+                Kembali
+            </a>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Update Promo
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+```
 
 </div>
 

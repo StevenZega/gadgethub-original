@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\PromoController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -46,4 +47,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::patch('/user/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/user/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.delete');
+});
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::resource('products', ProductController::class);
+    Route::resource('promos', PromoController::class);
 });

@@ -18,7 +18,6 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-
         return view('admin.products.show', compact('product'));
     }
 
@@ -30,27 +29,27 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'category'    => 'required|string',
-            'brand'       => 'required|string',
+            'name'             => 'required|string|max:255',
+            'category'         => 'required|string',
+            'brand'            => 'required|string',
+            'price'            => 'required|integer|min:0',
+            'stock'            => 'required|integer|min:0',
+            'description'      => 'required|string',
+            
+            // Saat bikin baru gambar wajib dimasukkan
+            'image'            => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
 
-            'price'       => 'required|integer|min:0',
-            'stock'       => 'required|integer|min:0',
-
-            'description' => 'required|string',
-
-            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-
-            'ram'                 => 'nullable|integer',
-            'storage'             => 'nullable|integer',
-            'battery_capacity'    => 'nullable|integer',
-
-            'processor'           => 'nullable|string',
-            'rear_camera'         => 'nullable|string',
-            'screen_size'         => 'nullable|string',
-
-            'os'                  => 'nullable|string',
-            'vga'                 => 'nullable|string',
+            'ram'              => 'nullable|integer',
+            'storage'          => 'nullable|integer',
+            'battery_capacity' => 'nullable|integer',
+            
+            // Name di form HTML create & edit sudah seragam menggunakan 'processor'
+            'processor'        => 'nullable|string',
+            
+            'rear_camera'      => 'nullable|string',
+            'screen_size'      => 'nullable|string',
+            'os'               => 'nullable|string',
+            'vga'              => 'nullable|string',
         ]);
 
         try {
@@ -76,39 +75,47 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $data = $request->validate([
-                        'name'        => 'required|string|max:255',
-            'category'    => 'required|string',
-            'brand'       => 'required|string',
+        // Validasi Data (Mengubah image menjadi 'nullable' agar jika dikosongkan tidak memicu error)
+        $validatedData = $request->validate([
+            'name'             => 'required|string|max:255',
+            'category'         => 'required|string',
+            'brand'            => 'required|string',
+            'price'            => 'required|integer|min:0',
+            'stock'            => 'required|integer|min:0',
+            'description'      => 'required|string',
+            
+            // Diubah ke nullable agar kalau dikosongkan tidak memicu error required
+            'image'            => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', 
 
-            'price'       => 'required|integer|min:0',
-            'stock'       => 'required|integer|min:0',
-
-            'description' => 'required|string',
-
-            'image'       => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-
-            'ram'                 => 'nullable|integer',
-            'storage'             => 'nullable|integer',
-            'battery_capacity'    => 'nullable|integer',
-
-            'processor'           => 'nullable|string',
-            'rear_camera'         => 'nullable|string',
-            'screen_size'         => 'nullable|string',
-
-            'os'                  => 'nullable|string',
-            'vga'                 => 'nullable|string',
+            'ram'              => 'nullable|integer',
+            'storage'          => 'nullable|integer',
+            'battery_capacity' => 'nullable|integer',
+            
+            // Sinkronisasi penuh menggunakan field 'processor' murni dari form edit blade
+            'processor'        => 'nullable|string', 
+            
+            'rear_camera'      => 'nullable|string',
+            'screen_size'      => 'nullable|string',
+            'os'               => 'nullable|string',
+            'vga'              => 'nullable|string',
         ]);
 
         try {
+            // Logika Berkas Gambar (Hanya berjalan jika admin mengunggah foto baru)
             if ($request->hasFile('image')) {
+                // Hapus berkas foto lama dari sistem penyimpanan agar server hemat space
                 if ($product->image) {
                     Storage::disk('public')->delete($product->image);
                 }
-                $data['image'] = $request->file('image')->store('products', 'public');
+                // Simpan berkas foto yang baru masuk
+                $validatedData['image'] = $request->file('image')->store('products', 'public');
+            } else {
+                // JIKA tidak ganti foto, amankan path foto lama agar tidak hilang dari database
+                $validatedData['image'] = $product->image;
             }
 
-            $product->update($data);
+            // Eksekusi pembaruan ke database
+            $product->update($validatedData);
 
             return redirect()->route('products.index')->with('success', 'Product updated successfully!');
 

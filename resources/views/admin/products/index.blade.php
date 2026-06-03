@@ -5,6 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="fw-bold m-0 text-white">Data Produk Gadget</h3>
+
             <p class="small mb-0 text-white">Total inventaris unit toko Anda saat ini.</p>
         </div>
         <a href="{{ route('products.create') }}" class="btn-modern px-4 py-2.5 d-inline-flex align-items-center fw-semibold text-decoration-none" style="background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 12px; gap: 8px;">

@@ -79,4 +79,11 @@ class PromoController extends Controller
 
         return redirect()->route('promos.index')->with('success', 'Promo berhasil diperbarui!');
     }
+
+    // 7. Tampilkan detail promo
+    public function show(Promo $promo)
+    {
+    // Mengarahkan ke file view show yang baru saja kita buat di atas
+        return view('admin.promos.show', compact('promo'));
+    }
 }

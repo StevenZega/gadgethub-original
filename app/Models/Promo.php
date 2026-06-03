@@ -10,10 +10,13 @@ class Promo extends Model
 {
     use HasFactory;
 
+    // FIX: Sudah ditambahkan 'scope' dan 'category' agar bisa di-edit dan di-save
     protected $fillable = [
         'code',
         'name',
         'discount_percent',
+        'scope',
+        'category',
         'product_id',
         'start_date',
         'end_date',

@@ -3,7 +3,9 @@
 @section('content')
 <div class="container">
     <div class="mb-3">
-        <a href="{{ route('products.index') }}" class="btn btn-secondary btn-sm">< Back to List</a>
+        <a href="{{ route('products.index') }}" class="btn-modern btn-sm py-2 px-3 fs-7" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+            <i class="bi bi-arrow-left-short fs-5 m-0"></i> Kembali ke List
+        </a>
     </div>
 
     <div class="card border-0 shadow-sm overflow-hidden bg-white" style="border-radius: 15px;">

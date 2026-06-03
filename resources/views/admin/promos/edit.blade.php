@@ -102,8 +102,6 @@
 </style>
 
 <div class="promo-card">
-
-```
 <div class="promo-header">
     <div>
         <h2 class="promo-title">

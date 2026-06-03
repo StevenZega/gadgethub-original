@@ -137,16 +137,16 @@
                             </a>
 
                             <form action="{{ route('promos.destroy', $promo->id) }}"
-                                  method="POST"
-                                  class="d-inline"
-                                  onclick="event.stopPropagation()">
+                                method="POST"
+                                class="d-inline delete-form"
+                                onclick="event.stopPropagation()">
 
                                 @csrf
                                 @method('DELETE')
 
                                 <button type="submit"
                                         class="btn btn-danger btn-sm"
-                                        onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus promo ini?')">
+                                        onclick="event.stopPropagation()">
 
                                     <i class="bi bi-trash"></i>
                                     Hapus
@@ -176,5 +176,41 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    document.querySelectorAll('.delete-form').forEach(form => {
+
+        form.addEventListener('submit', function(e) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Hapus Promo?',
+                text: 'Data promo ini akan dihapus secara permanen!',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                background: '#1e293b',
+                color: '#ffffff',
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+
+            });
+
+        });
+
+    });
+
+</script>
 
 @endsection

@@ -55,9 +55,15 @@
     }
 </style>
 
-<div class="promo-card">
+<div class="mb-4">
+    <a href="{{ route('promos.index') }}"
+       class="text-decoration-none text-white bg-secondary px-3 py-2 rounded-3 d-inline-block">
+        <i class="bi bi-arrow-left"></i>
+        Kembali ke Daftar Promo
+    </a>
+</div>
 
-```
+<div class="promo-card">
 <div class="promo-header">
     <h2 class="promo-title text-white">
         Tambah Promo

@@ -52,6 +52,8 @@ class ProductController extends Controller
             'vga'              => 'nullable|string',
         ]);
 
+        $data['processor'] = $request->phone_processor ?: $request->laptop_processor;
+
         try {
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('products', 'public');
@@ -99,6 +101,11 @@ class ProductController extends Controller
             'os'               => 'nullable|string',
             'vga'              => 'nullable|string',
         ]);
+
+        // Jembatan pengaman jika form masih menggunakan penamaan lama dari Adit
+        if ($request->has('phone_processor') || $request->has('laptop_processor')) {
+            $validatedData['processor'] = $request->phone_processor ?: $request->laptop_processor;
+        }
 
         try {
             // Logika Berkas Gambar (Hanya berjalan jika admin mengunggah foto baru)

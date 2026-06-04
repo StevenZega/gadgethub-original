@@ -44,15 +44,15 @@
                 </div>
 
                 <h3 class="mt-4 fw-bold">
-                    {{ $promo->nama_promo }}
+                    {{ $promo->name }}
                 </h3>
 
                 <div class="promo-code">
-                    {{ $promo->kode_promo }}
+                    {{ $promo->code }}
                 </div>
 
                 <div class="promo-discount">
-                    {{ $promo->diskon }}%
+                    {{ $promo->discount_percent }}%
                 </div>
 
             </div>
@@ -73,12 +73,12 @@
 
             <div class="detail-row">
                 <span>Nama Promo</span>
-                <strong>{{ $promo->nama_promo }}</strong>
+                <strong>{{ $promo->name }}</strong>
             </div>
 
             <div class="detail-row">
                 <span>Kode Promo</span>
-                <strong>{{ $promo->kode_promo }}</strong>
+                <strong>{{ $promo->code }}</strong>
             </div>
 
             {{-- TAMBAHAN JENIS CAKUPAN --}}
@@ -108,20 +108,20 @@
 
             <div class="detail-row">
                 <span>Diskon</span>
-                <strong>{{ $promo->diskon }}%</strong>
+                <strong>{{ $promo->discount_percent }}%</strong>
             </div>
 
             <div class="detail-row">
                 <span>Tanggal Mulai</span>
                 <strong>
-                    {{ \Carbon\Carbon::parse($promo->tanggal_mulai)->format('d F Y') }}
+                    {{ \Carbon\Carbon::parse($promo->start_date)->format('d F Y') }}
                 </strong>
             </div>
 
             <div class="detail-row">
                 <span>Tanggal Berakhir</span>
                 <strong>
-                    {{ \Carbon\Carbon::parse($promo->tanggal_selesai)->format('d F Y') }}
+                    {{ \Carbon\Carbon::parse($promo->end_date)->format('d F Y') }}
                 </strong>
             </div>
 

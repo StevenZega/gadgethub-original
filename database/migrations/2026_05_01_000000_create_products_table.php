@@ -29,7 +29,7 @@ return new class extends Migration
         $table->integer('ram')->nullable();
         $table->integer('storage')->nullable();
 
-        // Hape
+        // Handphone
         $table->integer('battery_capacity')->nullable();
         $table->string('processor')->nullable();
         $table->string('rear_camera')->nullable();

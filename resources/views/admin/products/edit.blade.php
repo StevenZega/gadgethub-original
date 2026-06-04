@@ -57,15 +57,12 @@
                             <label for="name" class="form-label fw-bold text-white text-uppercase tracking-wider small">Nama Produk</label>
                             <input type="text" name="name" class="form-control text-white input-custom-dark" id="name" value="{{ old('name', $product->name) }}" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label fw-bold text-white text-uppercase tracking-wider small">Deskripsi Produk</label>
-                            <textarea name="description" class="form-control text-white input-custom-dark" id="description" rows="4" required>{{ old('description', $product->description) }}</textarea>
-                        </div>
-
+                        
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold text-white text-uppercase tracking-wider small">Kategori</label>
                             <input type="text" name="category" class="form-control text-white input-custom-dark fw-bold" value="{{ $product->category }}" readonly style="background: rgba(255,255,255,0.05) !important; cursor: not-allowed;">
                         </div>
+                        
                         <div class="col-md-6 mb-3">
                             <label for="brand" class="form-label fw-bold text-white text-uppercase tracking-wider small">Merek</label>
                             <input type="text" name="brand" class="form-control text-white input-custom-dark" id="brand" value="{{ old('brand', $product->brand) }}" required>
@@ -73,7 +70,13 @@
                     </div>
 
                     <div class="p-4 mb-4 rounded-4 border border-secondary border-opacity-20 mt-2" style="background: rgba(255,255,255,0.02);">
-                        <h6 class="text-white mb-3 fw-bold d-flex align-items-center gap-2" style="font-size: 0.85rem; text-transform: uppercase;"><i class="bi bi-cpu-fill text-info"></i> Input Spesifikasi Fisik {{ $product->category }}</h6>
+                        <h6 class="text-white mb-3 fw-bold d-flex align-items-center gap-2" style="font-size: 0.85rem; text-transform: uppercase;">
+                            @if($product->category === 'Laptop')
+                                <i class="bi bi-cpu-fill text-info"></i> Spesifikasi Laptop
+                            @else
+                                <i class="bi bi-phone-fill text-warning"></i> Spesifikasi Handphone
+                            @endif
+                        </h6>
 
                         @if($product->category === 'Laptop')
                             <div class="row g-3">
@@ -85,7 +88,7 @@
                             </div>
                         @endif
 
-                        @if($product->category === 'Hape')
+                        @if($product->category === 'Handphone')
                             <div class="row g-3">
                                 <div class="col-md-4"><label class="text-white small">Sistem Operasi</label><input type="text" name="os" class="form-control text-white input-custom-dark" value="{{ old('os', $product->os) }}"></div>
                                 <div class="col-md-4"><label class="text-white small">RAM (GB)</label><input type="number" name="ram" class="form-control text-white input-custom-dark" value="{{ old('ram', $product->ram) }}"></div>
@@ -96,6 +99,11 @@
                                 <div class="col-md-6"><label class="text-white small">Dimensi Layar</label><input type="text" name="screen_size" class="form-control text-white input-custom-dark" value="{{ old('screen_size', $product->screen_size) }}"></div>
                             </div>
                         @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label fw-bold text-white text-uppercase tracking-wider small">Deskripsi Produk</label>
+                        <textarea name="description" class="form-control text-white input-custom-dark" id="description" rows="4" required>{{ old('description', $product->description) }}</textarea>
                     </div>
 
                     <div class="row">
@@ -133,10 +141,14 @@
     function previewImg() {
         const image = document.querySelector('#image');
         const imgPreview = document.querySelector('#image-preview');
+        const placeholder = document.querySelector('#image-placeholder');
         if (image.files && image.files[0]) {
             const oFReader = new FileReader();
             oFReader.readAsDataURL(image.files[0]);
             oFReader.onload = function(oFREvent) {
+                if(placeholder) placeholder.style.display = 'none';
+                imgPreview.classList.remove('d-none');
+                imgPreview.style.display = 'block';
                 imgPreview.src = oFREvent.target.result;
             }
         }

@@ -132,9 +132,9 @@
 
                 <input
                     type="text"
-                    name="nama_promo"
+                    name="name"
                     class="form-control modern-input"
-                    value="{{ $promo->nama_promo }}">
+                    value="{{ $promo->name }}">
             </div>
 
             <div class="col-md-6 mb-4">
@@ -144,9 +144,9 @@
 
                 <input
                     type="text"
-                    name="kode_promo"
+                    name="code"
                     class="form-control modern-input"
-                    value="{{ $promo->kode_promo }}">
+                    value="{{ $promo->code }}">
             </div>
 
             <div class="col-md-6 mb-4">
@@ -183,9 +183,9 @@
 
                 <input
                     type="number"
-                    name="diskon"
+                    name="discount_percent"
                     class="form-control modern-input"
-                    value="{{ $promo->diskon }}">
+                    value="{{ $promo->discount_percent }}">
             </div>
 
             <div class="col-md-6 mb-4">
@@ -217,9 +217,9 @@
 
                 <input
                     type="date"
-                    name="tanggal_mulai"
+                    name="start_date"
                     class="form-control modern-input"
-                    value="{{ $promo->tanggal_mulai }}">
+                    value="{{ $promo->start_date }}">
             </div>
 
             <div class="col-md-6 mb-4">
@@ -229,9 +229,9 @@
 
                 <input
                     type="date"
-                    name="tanggal_selesai"
+                    name="end_date"
                     class="form-control modern-input"
-                    value="{{ $promo->tanggal_selesai }}">
+                    value="{{ $promo->end_date }}">
             </div>
 
         </div>

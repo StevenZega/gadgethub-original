@@ -60,7 +60,7 @@
                             <select name="category" id="category" class="form-select text-white input-custom-dark @error('category') is-invalid @enderror" required>
                                 <option value="" class="bg-dark">-- Pilih Kategori --</option>
                                 <option value="Laptop" {{ old('category') == 'Laptop' ? 'selected' : '' }} class="bg-dark">Laptop</option>
-                                <option value="Hape" {{ old('category') == 'Hape' ? 'selected' : '' }} class="bg-dark">Hape</option>
+                                <option value="Handphone" {{ old('category') == 'Handphone' ? 'selected' : '' }} class="bg-dark">Handphone</option>
                             </select>
                             @error('category') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
@@ -85,13 +85,13 @@
                     <div id="phone-specs" class="p-4 mb-4 rounded-4 border border-secondary border-opacity-20 mt-2" style="background: rgba(255,255,255,0.02); display: none;">
                         <h6 class="text-white mb-3 fw-bold d-flex align-items-center gap-2" style="font-size: 0.85rem; text-transform: uppercase;"><i class="bi bi-phone-fill text-warning"></i> Spesifikasi Handphone</h6>
                         <div class="row g-3">
-                            <div class="col-md-4"><label class="text-white small">OS</label><input type="text" id="os_hape" class="form-control text-white input-custom-dark" placeholder="Android 14"></div>
-                            <div class="col-md-4"><label class="text-white small">RAM (GB)</label><input type="number" id="ram_hape" class="form-control text-white input-custom-dark"></div>
-                            <div class="col-md-4"><label class="text-white small">Storage (GB)</label><input type="number" id="storage_hape" class="form-control text-white input-custom-dark"></div>
-                            <div class="col-md-6"><label class="text-white small">Chipset Processor</label><input type="text" id="processor_hape" class="form-control text-white input-custom-dark" placeholder="Snapdragon 8 Gen 3"></div>
-                            <div class="col-md-6"><label class="text-white small">Kamera Utama</label><input type="text" name="rear_camera" class="form-control text-white input-custom-dark" placeholder="50 MP"></div>
-                            <div class="col-md-6"><label class="text-white small">Baterai (mAh)</label><input type="number" name="battery_capacity" class="form-control text-white input-custom-dark" placeholder="5000"></div>
-                            <div class="col-md-6"><label class="text-white small">Ukuran Layar</label><input type="text" name="screen_size" class="form-control text-white input-custom-dark" placeholder="6.7 inch"></div>
+                            <div class="col-md-4"><label class="text-white small">OS</label><input type="text" id="os_Handphone" class="form-control text-white input-custom-dark" placeholder="Android 14"></div>
+                            <div class="col-md-4"><label class="text-white small">RAM (GB)</label><input type="number" id="ram_Handphone" class="form-control text-white input-custom-dark"></div>
+                            <div class="col-md-4"><label class="text-white small">Storage (GB)</label><input type="number" id="storage_Handphone" class="form-control text-white input-custom-dark"></div>
+                            <div class="col-md-6"><label class="text-white small">Chipset Processor</label><input type="text" id="processor_Handphone" class="form-control text-white input-custom-dark" placeholder="Snapdragon 8 Gen 3"></div>
+                            <div class="col-md-6"><label class="text-white small">Kamera Utama</label><input type="text" id="rear_camera" name="rear_camera" class="form-control text-white input-custom-dark" placeholder="50 MP"></div>
+                            <div class="col-md-6"><label class="text-white small">Baterai (mAh)</label><input type="number" id="battery_capacity" name="battery_capacity" class="form-control text-white input-custom-dark" placeholder="5000"></div>
+                            <div class="col-md-6"><label class="text-white small">Ukuran Layar</label><input type="text" id="screen_size" name="screen_size" class="form-control text-white input-custom-dark" placeholder="6.7 inch"></div>
                         </div>
                     </div>
 
@@ -153,9 +153,9 @@
 
         function updateFormNames() {
             const isLaptop = categorySelect.value === 'Laptop';
-            const isHape = categorySelect.value === 'Hape';
+            const isHandphone = categorySelect.value === 'Handphone';
 
-            phoneSpecs.style.display = isHape ? 'block' : 'none';
+            phoneSpecs.style.display = isHandphone ? 'block' : 'none';
             laptopSpecs.style.display = isLaptop ? 'block' : 'none';
 
             // Alokasikan atribut NAME secara dinamis agar controller menerima field murni
@@ -165,10 +165,10 @@
             document.getElementById('storage_laptop').name = isLaptop ? 'storage' : '';
             document.getElementById('processor_laptop').name = isLaptop ? 'processor' : '';
 
-            document.getElementById('os_hape').name = isHape ? 'os' : '';
-            document.getElementById('ram_hape').name = isHape ? 'ram' : '';
-            document.getElementById('storage_hape').name = isHape ? 'storage' : '';
-            document.getElementById('processor_hape').name = isHape ? 'processor' : '';
+            document.getElementById('os_Handphone').name = isHandphone ? 'os' : '';
+            document.getElementById('ram_Handphone').name = isHandphone ? 'ram' : '';
+            document.getElementById('storage_Handphone').name = isHandphone ? 'storage' : '';
+            document.getElementById('processor_Handphone').name = isHandphone ? 'processor' : '';
         }
 
         categorySelect.addEventListener('change', updateFormNames);

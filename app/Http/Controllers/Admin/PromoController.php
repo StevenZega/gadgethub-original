@@ -24,37 +24,28 @@ class PromoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_promo' => 'required|string|max:255',
-
-            'kode_promo' => 'required|string|max:50|unique:promos,kode_promo',
-
-            // TAMBAHAN JENIS CAKUPAN
-            'jenis_cakupan' => 'required|in:all,category,specific',
-
-            'diskon' => 'required|numeric|min:1|max:100',
-
-            'status' => 'required|in:aktif,nonaktif',
-
-            'tanggal_mulai' => 'required|date',
-
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+            'name'             => 'required|string|max:255',
+            'code'             => 'required|string|max:50|unique:promos,code',
+            'jenis_cakupan'    => 'required|in:all,category,specific',
+            'discount_percent' => 'required|numeric|min:1|max:100',
+            'status'           => 'required|in:aktif,nonaktif',
+            'start_date'       => 'required|date',
+            'end_date'         => 'required|date|after_or_equal:start_date',
+            // Validasi tambahan agar fitur filter produk/kategori temanmu aman
+            'category'         => 'nullable|string|max:255',
+            'product_id'       => 'nullable|exists:products,id',
         ]);
 
         Promo::create([
-            'nama_promo'      => $request->nama_promo,
-
-            'kode_promo'      => strtoupper($request->kode_promo),
-
-            // TAMBAHAN JENIS CAKUPAN
-            'jenis_cakupan'   => $request->jenis_cakupan,
-
-            'diskon'          => $request->diskon,
-
-            'status'          => $request->status,
-
-            'tanggal_mulai'   => $request->tanggal_mulai,
-
-            'tanggal_selesai' => $request->tanggal_selesai,
+            'name'             => $request->name,
+            'code'             => strtoupper($request->code),
+            'scope'            => $request->jenis_cakupan, // Dipetakan ke kolom 'scope'
+            'discount_percent' => $request->discount_percent,
+            'is_active'        => $request->status === 'aktif', // Konversi teks menjadi boolean true/false
+            'start_date'       => $request->start_date,
+            'end_date'         => $request->end_date,
+            'category'         => $request->jenis_cakupan === 'category' ? $request->category : null,
+            'product_id'       => $request->jenis_cakupan === 'specific' ? $request->product_id : null,
         ]);
 
         return redirect()
@@ -75,42 +66,33 @@ class PromoController extends Controller
     public function update(Request $request, Promo $promo)
     {
         $request->validate([
-            'nama_promo' => 'required|string|max:255',
-
-            'kode_promo' => [
+            'name'             => 'required|string|max:255',
+            'code'             => [
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('promos', 'kode_promo')->ignore($promo->id),
+                Rule::unique('promos', 'code')->ignore($promo->id),
             ],
-
-            // TAMBAHAN JENIS CAKUPAN
-            'jenis_cakupan' => 'required|in:all,category,specific',
-
-            'diskon' => 'required|numeric|min:1|max:100',
-
-            'status' => 'required|in:aktif,nonaktif',
-
-            'tanggal_mulai' => 'required|date',
-
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+            'jenis_cakupan'    => 'required|in:all,category,specific',
+            'discount_percent' => 'required|numeric|min:1|max:100',
+            'status'           => 'required|in:aktif,nonaktif',
+            'start_date'       => 'required|date',
+            'end_date'         => 'required|date|after_or_equal:start_date',
+            // Validasi tambahan untuk update data
+            'category'         => 'nullable|string|max:255',
+            'product_id'       => 'nullable|exists:products,id',
         ]);
 
         $promo->update([
-            'nama_promo'      => $request->nama_promo,
-
-            'kode_promo'      => strtoupper($request->kode_promo),
-
-            // TAMBAHAN JENIS CAKUPAN
-            'jenis_cakupan'   => $request->jenis_cakupan,
-
-            'diskon'          => $request->diskon,
-
-            'status'          => $request->status,
-
-            'tanggal_mulai'   => $request->tanggal_mulai,
-
-            'tanggal_selesai' => $request->tanggal_selesai,
+            'name'             => $request->name,
+            'code'             => strtoupper($request->code),
+            'scope'            => $request->jenis_cakupan, // Dipetakan ke kolom 'scope'
+            'discount_percent' => $request->discount_percent,
+            'is_active'        => $request->status === 'aktif', // Konversi teks menjadi boolean true/false
+            'start_date'       => $request->start_date,
+            'end_date'         => $request->end_date,
+            'category'         => $request->jenis_cakupan === 'category' ? $request->category : null,
+            'product_id'       => $request->jenis_cakupan === 'specific' ? $request->product_id : null,
         ]);
 
         return redirect()

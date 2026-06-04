@@ -37,6 +37,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth');
 
+Route::get('/search-products', [HomeController::class, 'searchProducts'])
+    ->name('products.search');
+
 /*
 |--------------------------------------------------------------------------
 | REDIRECT DASHBOARD
@@ -85,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     | CART
     |--------------------------------------------------------------------------
+    |
     */
 
     Route::get('/user/cart', [CartController::class, 'index'])

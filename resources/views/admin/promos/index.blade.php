@@ -60,13 +60,13 @@
 
                         <td>
                             <strong>
-                                {{ $promo->nama_promo }}
+                                {{ $promo->name }}
                             </strong>
                         </td>
 
                         <td>
                             <span class="badge bg-info text-dark">
-                                {{ $promo->kode_promo }}
+                                {{ $promo->code }}
                             </span>
                         </td>
 
@@ -97,7 +97,7 @@
 
                         <td>
                             <span class="badge bg-primary">
-                                {{ $promo->diskon }}%
+                                {{ $promo->discount_percent }}%
                             </span>
                         </td>
 
@@ -118,11 +118,11 @@
                         </td>
 
                         <td>
-                            {{ \Carbon\Carbon::parse($promo->tanggal_mulai)->format('d M Y') }}
+                            {{ \Carbon\Carbon::parse($promo->start_date)->format('d M Y') }}
                         </td>
 
                         <td>
-                            {{ \Carbon\Carbon::parse($promo->tanggal_selesai)->format('d M Y') }}
+                            {{ \Carbon\Carbon::parse($promo->end_date)->format('d M Y') }}
                         </td>
 
                         <td>

@@ -89,7 +89,7 @@
 
                 <input
                     type="text"
-                    name="nama_promo"
+                    name="name"
                     class="form-control modern-input">
             </div>
 
@@ -100,7 +100,7 @@
 
                 <input
                     type="text"
-                    name="kode_promo"
+                    name="code"
                     class="form-control modern-input">
             </div>
 
@@ -135,7 +135,7 @@
 
                 <input
                     type="number"
-                    name="diskon"
+                    name="discount_percent"
                     class="form-control modern-input">
             </div>
 
@@ -166,7 +166,7 @@
 
                 <input
                     type="date"
-                    name="tanggal_mulai"
+                    name="start_date"
                     class="form-control modern-input">
             </div>
 
@@ -177,7 +177,7 @@
 
                 <input
                     type="date"
-                    name="tanggal_selesai"
+                    name="end_date"
                     class="form-control modern-input">
             </div>
 

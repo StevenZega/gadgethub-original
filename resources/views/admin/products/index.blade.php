@@ -57,10 +57,10 @@
                         <td class="pe-4 py-4 text-end" onclick="event.stopPropagation();">
                             <div class="d-inline-flex gap-2">
                                 <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-outline-warning rounded-3 px-3 py-1.5 fw-medium border-opacity-50">
-                                    Edit
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
                                 </a>
                                 <button type="button" class="btn btn-sm btn-outline-danger rounded-3 px-3 py-1.5 fw-medium border-opacity-50" onclick="confirmDelete({{ $product->id }})">
-                                    Hapus
+                                    <i class="bi bi-trash me-1"></i> Hapus
                                 </button>
                             </div>
                             <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-none">

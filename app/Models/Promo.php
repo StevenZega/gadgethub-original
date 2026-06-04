@@ -3,16 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Promo extends Model
 {
     protected $fillable = [
-        'nama_promo',
-        'kode_promo',
-        'jenis_cakupan',
-        'diskon',
-        'status',
-        'tanggal_mulai',
-        'tanggal_selesai'
+        'name',
+        'code',
+        'scope', 
+        'category',    
+        'product_id',       
+        'discount_percent',
+        'is_active',        
+        'start_date',
+        'end_date'
     ];
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

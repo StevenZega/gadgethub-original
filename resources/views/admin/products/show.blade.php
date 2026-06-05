@@ -68,7 +68,8 @@
                     <div class="mb-4">
                         <h5 class="custom-header-label mb-3"><i class="bi bi-cpu text-info"></i> Lembar Spesifikasi Teknis</h5>
                         
-                        @if($product->category === 'Laptop')
+                        {{-- Pengecekan Kategori Laptop (Lebih Aman) --}}
+                        @if(Str::lower($product->category) == 'laptop')
                             <div class="row g-3">
                                 <div class="col-6 col-sm-4">
                                     <div class="spec-box-custom">
@@ -108,7 +109,8 @@
                             </div>
                         @endif
 
-                        @if($product->category === 'Handphone')
+                        {{-- Pengecekan Kategori Handphone / Smartphone / Hape --}}
+                        @if(Str::lower($product->category) == 'handphone' || Str::lower($product->category) == 'smartphone' || Str::lower($product->category) == 'hape')
                             <div class="row g-3">
                                 <div class="col-6 col-sm-4">
                                     <div class="spec-box-custom">

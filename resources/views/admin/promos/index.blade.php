@@ -12,8 +12,7 @@
             </small>
         </div>
 
-        <a href="{{ route('promos.create') }}"
-           class="btn-modern">
+        <a href="{{ route('promos.create') }}" class="btn-modern">
             <i class="bi bi-plus-circle"></i>
             Tambah Promo
         </a>
@@ -22,11 +21,7 @@
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show">
             {{ session('success') }}
-
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert">
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
@@ -38,10 +33,7 @@
                 <tr>
                     <th>Nama Promo</th>
                     <th>Kode Promo</th>
-
-                    {{-- TAMBAHAN JENIS CAKUPAN --}}
                     <th>Jenis Cakupan</th>
-
                     <th>Diskon</th>
                     <th>Status</th>
                     <th>Tanggal Mulai</th>
@@ -54,14 +46,10 @@
 
                 @forelse($promos as $promo)
 
-                    <tr
-                        onclick="window.location.href='{{ route('promos.show', $promo->id) }}'"
-                        style="cursor:pointer;">
+                    <tr onclick="window.location.href='{{ route('promos.show', $promo->id) }}'" style="cursor:pointer;">
 
                         <td>
-                            <strong>
-                                {{ $promo->name }}
-                            </strong>
+                            <strong>{{ $promo->name }}</strong>
                         </td>
 
                         <td>
@@ -70,29 +58,14 @@
                             </span>
                         </td>
 
-                        {{-- TAMBAHAN JENIS CAKUPAN --}}
                         <td>
-
-                            @if($promo->jenis_cakupan == 'all')
-
-                                <span class="badge bg-info px-3 py-2 rounded-pill">
-                                    Universal
-                                </span>
-
-                            @elseif($promo->jenis_cakupan == 'category')
-
-                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                                    Per Kategori
-                                </span>
-
+                            @if($promo->scope == 'all')
+                                <span class="badge bg-info px-3 py-2 rounded-pill">Universal</span>
+                            @elseif($promo->scope == 'category')
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">Per Kategori</span>
                             @else
-
-                                <span class="badge bg-primary px-3 py-2 rounded-pill">
-                                    Produk Spesifik
-                                </span>
-
+                                <span class="badge bg-primary px-3 py-2 rounded-pill">Produk Spesifik</span>
                             @endif
-
                         </td>
 
                         <td>
@@ -102,18 +75,10 @@
                         </td>
 
                         <td>
-                            @if($promo->status == 'aktif')
-
-                                <span class="badge bg-success">
-                                    Aktif
-                                </span>
-
+                            @if($promo->is_active)
+                                <span class="badge bg-success">Aktif</span>
                             @else
-
-                                <span class="badge bg-danger">
-                                    Nonaktif
-                                </span>
-
+                                <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
 
@@ -126,35 +91,17 @@
                         </td>
 
                         <td>
-
-                            <a href="{{ route('promos.edit', $promo->id) }}"
-                               class="btn btn-warning btn-sm"
-                               onclick="event.stopPropagation()">
-
-                                <i class="bi bi-pencil-square"></i>
-                                Edit
-
+                            <a href="{{ route('promos.edit', $promo->id) }}" class="btn btn-warning btn-sm" onclick="event.stopPropagation()">
+                                <i class="bi bi-pencil-square"></i> Edit
                             </a>
 
-                            <form action="{{ route('promos.destroy', $promo->id) }}"
-                                method="POST"
-                                class="d-inline delete-form"
-                                onclick="event.stopPropagation()">
-
+                            <form action="{{ route('promos.destroy', $promo->id) }}" method="POST" class="d-inline delete-form" onclick="event.stopPropagation()">
                                 @csrf
                                 @method('DELETE')
-
-                                <button type="submit"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="event.stopPropagation()">
-
-                                    <i class="bi bi-trash"></i>
-                                    Hapus
-
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="event.stopPropagation()">
+                                    <i class="bi bi-trash"></i> Hapus
                                 </button>
-
                             </form>
-
                         </td>
 
                     </tr>
@@ -180,13 +127,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
     document.querySelectorAll('.delete-form').forEach(form => {
-
         form.addEventListener('submit', function(e) {
-
             e.preventDefault();
-
             Swal.fire({
                 icon: 'warning',
                 title: 'Hapus Promo?',
@@ -200,17 +143,12 @@
                 color: '#ffffff',
                 reverseButtons: true
             }).then((result) => {
-
                 if (result.isConfirmed) {
                     form.submit();
                 }
-
             });
-
         });
-
     });
-
 </script>
 
 @endsection

@@ -8,55 +8,59 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-public function index(Request $request)
-{
-    if (auth()->user()->role == 'admin') {
-        return redirect('/admin/dashboard');
+    public function index(Request $request)
+    {
+        if (auth()->user()->role == 'admin') {
+            return redirect('/admin/dashboard');
+        }
+
+        $products = Product::where('stock', '>', 0);
+
+        // Search
+        if ($request->search) {
+            $products->where(function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%')
+                      ->orWhere('brand', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter category (Sudah Diperbaiki agar fleksibel)
+        if ($request->category) {
+            if (strtolower($request->category) == 'handphone') {
+                // Jika user pilih 'Handphone', sistem otomatis mencari 'Handphone', 'Smartphone', atau 'Hape'
+                $products->whereIn('category', ['Handphone', 'Smartphone', 'Hape']);
+            } else {
+                $products->where('category', $request->category);
+            }
+        }
+
+        // Sorting
+        switch ($request->sort) {
+            case 'price_asc':
+                $products->orderBy('price', 'asc');
+                break;
+
+            case 'price_desc':
+                $products->orderBy('price', 'desc');
+                break;
+
+            case 'name_asc':
+                $products->orderBy('name', 'asc');
+                break;
+
+            case 'name_desc':
+                $products->orderBy('name', 'desc');
+                break;
+
+            default:
+                $products->latest();
+                break;
+        }
+        
+        $products = $products->get();
+
+        return view('user.index', compact('products'));
     }
-
-    $products = Product::where('stock', '>', 0);
-
-    // Search
-    if ($request->search) {
-        $products->where(function ($query) use ($request) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('brand', 'like', '%' . $request->search . '%');
-        });
-    }
-
-    // Filter category
-    if ($request->category) {
-        $products->where('category', $request->category);
-    }
-
-    // Sorting
-    switch ($request->sort) {
-        case 'price_asc':
-            $products->orderBy('price', 'asc');
-            break;
-
-        case 'price_desc':
-            $products->orderBy('price', 'desc');
-            break;
-
-        case 'name_asc':
-            $products->orderBy('name', 'asc');
-            break;
-
-        case 'name_desc':
-            $products->orderBy('name', 'desc');
-            break;
-
-        default:
-            $products->latest();
-            break;
-    }
-    
-
-    $products = $products->get();
-
-    return view('user.index', compact('products'));
-}
 
     public function show($id)
     {
@@ -67,14 +71,16 @@ public function index(Request $request)
     }
 
     public function searchProducts(Request $request)
-{
-    $search = $request->search;
+    {
+        $search = $request->search;
 
-    $products = Product::where('name', 'like', "%{$search}%")
-        ->orWhere('brand', 'like', "%{$search}%")
+        $products = Product::where(function($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('brand', 'like', "%{$search}%");
+        })
         ->take(5)
         ->get();
 
-    return response()->json($products);
-}
+        return response()->json($products);
+    }
 }

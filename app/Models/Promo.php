@@ -2,30 +2,34 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Promo extends Model
 {
+    use HasFactory;
+
+    protected $table = 'promos';
+
     protected $fillable = [
         'name',
         'code',
-        'scope', 
-        'category',    
-        'product_id',       
+        'scope',
+        'category',
+        'product_id',
         'discount_percent',
-        'is_active',        
+        'quota',
+        'is_active',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
-    // TAMBAHKAN INI: Memaksa Laravel membaca is_active sebagai true/false murni
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
-    public function product(): BelongsTo
+    /**
+     * RELASI ELOPUENT: Promo menempel ke data Product
+     * Ini yang bikin nama produk (seperti ROG Phone) bisa dipanggil lewat $promo->product->name
+     */
+    public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

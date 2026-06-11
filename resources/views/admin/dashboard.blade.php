@@ -57,6 +57,9 @@
             <i class="bi bi-ticket-perforated-fill"></i> Promo
         </a>
 
+        <a href="{{ route('customer-profiles.index') }}" class="nav-link {{ Request::is('admin/customer-profiles*') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i> Customer
+
         <a href="#" class="nav-link">
             <i class="bi bi-bar-chart-line-fill"></i> Statistik
         </a>

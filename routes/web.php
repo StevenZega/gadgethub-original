@@ -8,6 +8,8 @@ use App\Http\Controllers\CartController;
 
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromoController;
+use App\Http\Controllers\CheckoutController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +104,20 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/user/cart/delete/{id}', [CartController::class, 'destroy'])
         ->name('cart.delete');
+
+    //Checkout
+
+    Route::get('/checkout/buy-now/{product}',
+        [CheckoutController::class, 'buyNow'])
+        ->name('checkout.buyNow');
+
+    Route::get('/checkout/cart',
+        [CheckoutController::class, 'cart'])
+        ->name('checkout.cart');
+
+    Route::post('/checkout/process',
+        [CheckoutController::class, 'process'])
+        ->name('checkout.process');
 });
 
 /*

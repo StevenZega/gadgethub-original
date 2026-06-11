@@ -97,9 +97,10 @@
                                 <i class="bi bi-cart-plus text-base"></i> + Masuk Keranjang
                             </button>
                         </form>
-                        <button type="button" class="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-2xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/20 text-center text-sm">
-                            Beli Sekarang
-                        </button>
+                        <a href="{{ route('checkout.buyNow', $product->id) }}"
+                            class="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-2xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/20 text-center text-sm block">
+                                Beli Sekarang
+                        </a>
                     </div>
                 </div>
             </div>

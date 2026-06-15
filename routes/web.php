@@ -65,6 +65,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/user/cart/delete/{id}', [CartController::class, 'destroy'])
         ->name('cart.delete');
+
+    Route::get('/user/profile', [HomeController::class, 'myProfile'])->name('user.profile');
+    
+    // TAMBAHAN: Route untuk memproses update data profil user
+    Route::post('/user/profile/update', [HomeController::class, 'updateProfile'])->name('user.profile.update');
 });
 
 Route::prefix('admin')

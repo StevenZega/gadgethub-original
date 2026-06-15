@@ -108,9 +108,11 @@
                         <span class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
                     </a>
 
-                    <span class="text-sm text-slate-400">
-                        <i class="bi bi-person-circle text-blue-400 mr-1.5"></i> Halo, <strong class="text-white">{{ auth()->user()->name }}</strong>
-                    </span>
+                    <a href="{{ route('user.profile') }}" class="text-sm text-slate-400 hover:text-blue-400 transition-colors duration-200 flex items-center group/profile" title="Lihat Profil Saya">
+                        <i class="bi bi-person-circle text-blue-400 mr-1.5 group-hover/profile:scale-110 transition-transform"></i> 
+                        <span>Halo, <strong class="text-white group-hover/profile:text-blue-400 transition-colors">{{ auth()->user()->name }}</strong></span>
+                    </a>
+
                     <form action="{{ url('/logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="text-sm font-semibold text-red-400 hover:text-red-300 transition flex items-center gap-1">
@@ -191,8 +193,7 @@
                 <i class="bi bi-chevron-right text-lg"></i>
             </button>
 
-            <div id="slider-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                </div>
+            <div id="slider-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20"></div>
         </div>
     </section>
     @endif
@@ -265,24 +266,22 @@
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs tracking-wider">
             &copy; {{ date('Y') }} GADGETHUB INDONESIA. All rights reserved.
         </div>
-    </nav>
+    </footer>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const btnJelajahi = document.getElementById('btn-jelajahi');
         if (btnJelajahi) {
             btnJelajahi.addEventListener('click', function(e) {
-                e.preventDefault(); // Mencegah hentakan instan bawaan browser
+                e.preventDefault(); 
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
                 
                 if (targetElement) {
-                    // Ambil posisi target dikurangi tinggi navbar (16px * 4 = 64px) agar tidak tertutup navbar sticky
                     const navbarOffset = 70; 
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - navbarOffset;
 
-                    // Menggunakan window.scrollTo dengan behavior smooth
                     window.scrollTo({
                         top: offsetPosition,
                         behavior: 'smooth'
@@ -318,7 +317,7 @@
             resultsBox.classList.remove('hidden');
         });
 
-        // --- 2. CUSTOM DROPDOWNS SYSTEM ---
+        // --- CUSTOM DROPDOWNS SYSTEM ---
         const dropdowns = document.querySelectorAll('.id-custom-dropdown');
         dropdowns.forEach(dropdown => {
             const btn = dropdown.querySelector('button');
@@ -375,7 +374,7 @@
             });
         });
 
-        // --- 3. PREMIUM SLIDER SYSTEM ENGINE ---
+        // --- PREMIUM SLIDER SYSTEM ENGINE ---
         const sliderContainer = document.getElementById('slider-container');
         if (sliderContainer) {
             const slides = sliderContainer.children;
@@ -386,7 +385,6 @@
             let currentIdx = 0;
             let slideInterval;
 
-            // Generate Indicators Dots
             for (let i = 0; i < totalSlides; i++) {
                 const dot = document.createElement('button');
                 dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-blue-500 w-6' : 'bg-white/30'}`;

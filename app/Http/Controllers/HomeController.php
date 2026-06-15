@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage; // TAMBAHAN: Untuk keperluan manajemen file foto
 
 class HomeController extends Controller
 {
@@ -82,5 +84,51 @@ class HomeController extends Controller
         ->get();
 
         return response()->json($products);
+    }
+
+    public function myProfile()
+    {
+        // Mengambil data user yang saat ini sedang login
+        $user = Auth::user();
+        
+        // Mengarahkan ke file view khusus profil user biasa
+        return view('user.profile', compact('user'));
+    }
+
+    // TAMBAHAN: Fungsi untuk memproses perubahan profil dari form user
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validasi data inputan
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Maksimal 2MB
+        ]);
+
+        // Menyimpan data perubahan teks
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+
+        // Logika Handle Upload Foto Profil Baru
+        if ($request->hasFile('photo')) {
+            // Hapus foto lama di folder storage jika ada sebelumnya
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
+
+            // Simpan foto baru ke folder storage/app/public/profiles
+            $path = $request->file('photo')->store('profiles', 'public');
+            $user->photo = $path;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui!');
     }
 }

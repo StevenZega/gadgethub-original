@@ -133,9 +133,11 @@
                             <span class="text-xl font-black text-cyan-400">Rp {{ number_format($totalAll, 0, ',', '.') }}</span>
                         </div>
 
-                        <button type="button" class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm hover:opacity-90 transition shadow-lg shadow-blue-600/10 flex items-center justify-center gap-2">
-                            Lanjut ke Pembayaran <i class="bi bi-arrow-right-short text-base"></i>
-                        </button>
+                        <a href="{{ route('checkout.cart') }}"
+                        class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm hover:opacity-90 transition shadow-lg shadow-blue-600/10 flex items-center justify-center gap-2">
+                            Lanjut ke Pembayaran
+                        </a>
+                        
                     </div>
                 </div>
 

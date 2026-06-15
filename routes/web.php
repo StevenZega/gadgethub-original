@@ -8,6 +8,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\CustomerProfileController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentController;
+
+
+/*
+|--------------------------------------------------------------------------
+| WEB ROUTES
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return redirect('/login');
@@ -65,6 +74,27 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/user/cart/delete/{id}', [CartController::class, 'destroy'])
         ->name('cart.delete');
+
+    //Checkout
+
+    Route::get('/checkout/buy-now/{product}',
+        [CheckoutController::class, 'buyNow'])
+        ->name('checkout.buyNow');
+
+    Route::get('/checkout/cart',
+        [CheckoutController::class, 'cart'])
+        ->name('checkout.cart');
+
+    Route::post('/checkout/process',
+        [CheckoutController::class, 'process'])
+        ->name('checkout.process');
+
+    // Payment
+    Route::get('/payment/{order}', [PaymentController::class, 'show'])
+        ->name('payment.show');
+        
+    // Rute upload bukti transfer
+    Route::post('/payment/{order}/upload', [PaymentController::class, 'uploadProof'])->name('payment.upload');
 });
 
 Route::prefix('admin')

@@ -250,9 +250,12 @@
                                         <i class="bi bi-cart-plus"></i> + Keranjang
                                     </button>
                                 </form>
-                                <button type="button" class="w-full bg-blue-600 text-white font-bold py-2 px-3 rounded-xl text-xs hover:bg-blue-700 transition shadow-md shadow-blue-600/10">
-                                    Checkout
-                                </button>
+                                <form action="{{ route('checkout.buyNow', $product->id) }}" method="GET">
+                                    <button type="submit"
+                                        class="w-full bg-blue-600 text-white font-bold py-2 px-3 rounded-xl text-xs hover:bg-blue-700 transition shadow-md shadow-blue-600/10">
+                                        Checkout
+                                    </button>
+                                </form>
                             </div>
                         </div>
 

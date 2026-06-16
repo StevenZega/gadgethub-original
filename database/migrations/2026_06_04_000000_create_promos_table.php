@@ -13,6 +13,9 @@ return new class extends Migration
             $table->string('code')->unique(); // Contoh: BCAULTAH5, IPHONE20
             $table->string('name'); // Nama Event Promo
             $table->integer('discount_percent'); // Potongan dalam %
+
+             // Jumlah maksimal penggunaan promo
+            $table->integer('quota')->default(100);
             
             // Kolom penentu Konsep Promo
             $table->string('scope')->default('all'); // Pilihan: 'all' (universal), 'category', atau 'specific'

@@ -52,6 +52,10 @@
         <a href="{{ route('products.index') }}" class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
             <i class="bi bi-box-seam-fill"></i> Kelola Produk
         </a>
+
+        <a href="{{ route('admin.orders.index') }}" class="nav-link {{ Request::is('admin/orders*') ? 'active' : '' }}">
+            <i class="bi bi-cart-fill"></i> Pesanan
+        </a>
         
         <a href="{{ route('promos.index') }}" class="nav-link {{ Request::is('admin/promos*') ? 'active' : '' }}">
             <i class="bi bi-ticket-perforated-fill"></i> Promo

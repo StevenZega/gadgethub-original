@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\CustomerProfileController;
@@ -99,11 +101,24 @@ Route::middleware(['auth'])->group(function () {
         
     // Rute upload bukti transfer
     Route::post('/payment/{order}/upload', [PaymentController::class, 'uploadProof'])->name('payment.upload');
+
+    // Riwayat Pesanan
+    Route::get('/user/orders', [OrderController::class, 'index'])
+        ->name('orders.index');
 });
 
 Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
+
+        Route::get('/orders', [AdminOrderController::class, 'index'])
+            ->name('admin.orders.index');
+
+        Route::patch('/orders/{order}/approve', [AdminOrderController::class, 'approve'])
+            ->name('admin.orders.approve');
+
+        Route::patch('/orders/{order}/reject', [AdminOrderController::class, 'reject'])
+            ->name('admin.orders.reject');
 
         Route::resource('products', ProductController::class);
 

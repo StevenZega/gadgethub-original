@@ -108,6 +108,13 @@
                         <span class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
                     </a>
 
+                     <a href="{{ route('orders.index') }}"
+                        class="text-slate-400 hover:text-cyan-400 text-xl p-1.5 transition flex items-center relative group"
+                        title="Riwayat Pesanan">
+                        <i class="bi bi-box-seam-fill"></i>
+                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-cyan-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
+                    </a>
+
                     <a href="{{ route('user.profile') }}" class="text-sm text-slate-400 hover:text-blue-400 transition-colors duration-200 flex items-center group/profile" title="Lihat Profil Saya">
                         <i class="bi bi-person-circle text-blue-400 mr-1.5 group-hover/profile:scale-110 transition-transform"></i> 
                         <span>Halo, <strong class="text-white group-hover/profile:text-blue-400 transition-colors">{{ auth()->user()->name }}</strong></span>

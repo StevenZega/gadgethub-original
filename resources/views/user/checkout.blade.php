@@ -103,6 +103,7 @@
                                 type="text"
                                 name="receiver_name"
                                 required
+                                value="{{ $user->name }}"
                                 class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white"
                                 placeholder="Masukkan nama penerima">
                         </div>
@@ -116,6 +117,7 @@
                                 type="text"
                                 name="phone"
                                 required
+                                value="{{ $user->phone }}"
                                 class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white"
                                 placeholder="08xxxxxxxxxx">
                         </div>
@@ -132,8 +134,7 @@
                             name="address"
                             rows="4"
                             required
-                            class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white"
-                            placeholder="Masukkan alamat lengkap"></textarea>
+                            class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white">{{ $user->address }}</textarea>
 
                     </div>
 

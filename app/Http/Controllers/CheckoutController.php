@@ -22,6 +22,7 @@ class CheckoutController extends Controller
                     'quantity' => 1
                 ]
             ]),
+            'user' => auth()->user(),
             'subtotal' => $subtotal,
             'checkout_type' => 'buy_now', // Tambahan
             'product_id' => $product->id  // Tambahan
@@ -39,6 +40,7 @@ class CheckoutController extends Controller
         });
 
         return view('user.checkout', [
+            'user' => auth()->user(),
             'products' => $cartItems,
             'subtotal' => $subtotal,
             'checkout_type' => 'cart' // Tambahan

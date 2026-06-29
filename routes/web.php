@@ -105,6 +105,9 @@ Route::middleware(['auth'])->group(function () {
     // Riwayat Pesanan
     Route::get('/user/orders', [OrderController::class, 'index'])
         ->name('orders.index');
+
+
+    Route::post('/user/reviews/store/{productId}', [HomeController::class, 'storeReview'])->name('user.reviews.store');
 });
 
 Route::prefix('admin')

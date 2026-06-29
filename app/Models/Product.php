@@ -31,4 +31,9 @@ class Product extends Model
     'os',
     'vga',
     ];
+    
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

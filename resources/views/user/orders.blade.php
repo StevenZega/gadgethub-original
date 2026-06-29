@@ -21,10 +21,6 @@
             <h1 class="text-3xl font-bold">
                 Riwayat Pesanan
             </h1>
-
-            <p class="text-slate-400 mt-2">
-                Semua transaksi yang pernah Anda lakukan.
-            </p>
         </div>
 
         <a href="{{ route('user.dashboard') }}"
@@ -103,28 +99,34 @@
 
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-4 mt-6">
-
-                        <div>
-                            <p class="text-slate-400 text-sm">
-                                Nama Penerima
-                            </p>
-
-                            <p class="font-semibold">
-                                {{ $order->receiver_name }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p class="text-slate-400 text-sm">
-                                Nomor HP
-                            </p>
-
-                            <p class="font-semibold">
-                                {{ $order->phone }}
-                            </p>
-                        </div>
-
+                    <div class="mt-6 space-y-4">
+                        
+                        @foreach($order->items as $item)
+                            <div class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-[#1e293b] rounded-lg flex items-center justify-center overflow-hidden p-2 border border-white/10">
+                                        @if($item->product && $item->product->image)
+                                            <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-contain">
+                                        @else
+                                            <i class="bi bi-image text-slate-500 text-xl"></i>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-sm text-slate-200 line-clamp-1">
+                                            {{ $item->product->name ?? 'Produk Telah Dihapus' }}
+                                        </h4>
+                                        <p class="text-xs text-slate-400 mt-1">
+                                            Rp {{ number_format($item->price, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm text-slate-400 bg-white/10 px-2.5 py-1 rounded-md border border-white/5">
+                                        x{{ $item->quantity }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="border-t border-white/10 mt-6 pt-4 flex justify-between">

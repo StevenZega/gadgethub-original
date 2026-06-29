@@ -11,13 +11,15 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::latest()->get();
+        // FILTER: Hanya mengambil produk milik admin yang sedang login
+        $products = Product::where('admin_id', auth()->id())->latest()->get();
         return view('admin.products.index', compact('products'));
     }
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        // FILTER: Pastikan admin tidak bisa mengintip ID produk milik admin lain lewat URL
+        $product = Product::where('admin_id', auth()->id())->findOrFail($id);
         return view('admin.products.show', compact('product'));
     }
 
@@ -36,23 +38,18 @@ class ProductController extends Controller
             'stock'            => 'required|integer|min:0',
             'description'      => 'required|string',
             'image'            => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-
             'ram'              => 'nullable|integer',
             'storage'          => 'nullable|integer',
             'battery_capacity' => 'nullable|integer',
-            
-            // PERBAIKAN: Izinkan dan validasi penamaan input lama dari form HTML
             'processor'        => 'nullable|string',
             'phone_processor'  => 'nullable|string', 
             'laptop_processor' => 'nullable|string', 
-            
             'rear_camera'      => 'nullable|string',
             'screen_size'      => 'nullable|string',
             'os'               => 'nullable|string',
             'vga'              => 'nullable|string',
         ]);
 
-        // Jembatan pengaman untuk menyatukan data ke kolom 'processor' di database
         $data['processor'] = $request->processor ?: ($request->phone_processor ?: $request->laptop_processor);
 
         try {
@@ -60,8 +57,10 @@ class ProductController extends Controller
                 $data['image'] = $request->file('image')->store('products', 'public');
             }
 
-            // Bersihkan sisa data 'phone_processor' & 'laptop_processor' agar tidak ikut masuk ke Product::create
             unset($data['phone_processor'], $data['laptop_processor']);
+
+            // SUNTIK DATA: Daftarkan id admin yang sedang login ke produk ini
+            $data['admin_id'] = auth()->id();
 
             Product::create($data);
 
@@ -76,12 +75,20 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        // PROTEKSI: Jika admin mencoba mengedit produk milik admin lain, tolak otomatis
+        if ($product->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengedit produk ini.');
+        }
+
         return view('admin.products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
-        // Validasi Data (Mengubah image menjadi 'nullable' agar jika dikosongkan tidak memicu error)
+        if ($product->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengubah produk ini.');
+        }
+
         $validatedData = $request->validate([
             'name'             => 'required|string|max:255',
             'category'         => 'required|string',
@@ -89,43 +96,31 @@ class ProductController extends Controller
             'price'            => 'required|integer|min:0',
             'stock'            => 'required|integer|min:0',
             'description'      => 'required|string',
-            
-            // Diubah ke nullable agar kalau dikosongkan tidak memicu error required
             'image'            => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', 
-
             'ram'              => 'nullable|integer',
             'storage'          => 'nullable|integer',
             'battery_capacity' => 'nullable|integer',
-            
-            // Sinkronisasi penuh menggunakan field 'processor' murni dari form edit blade
             'processor'        => 'nullable|string', 
-            
             'rear_camera'      => 'nullable|string',
             'screen_size'      => 'nullable|string',
             'os'               => 'nullable|string',
             'vga'              => 'nullable|string',
         ]);
 
-        // Jembatan pengaman jika form masih menggunakan penamaan lama dari Adit
         if ($request->has('phone_processor') || $request->has('laptop_processor')) {
             $validatedData['processor'] = $request->phone_processor ?: $request->laptop_processor;
         }
 
         try {
-            // Logika Berkas Gambar (Hanya berjalan jika admin mengunggah foto baru)
             if ($request->hasFile('image')) {
-                // Hapus berkas foto lama dari sistem penyimpanan agar server hemat space
                 if ($product->image) {
                     Storage::disk('public')->delete($product->image);
                 }
-                // Simpan berkas foto yang baru masuk
                 $validatedData['image'] = $request->file('image')->store('products', 'public');
             } else {
-                // JIKA tidak ganti foto, amankan path foto lama agar tidak hilang dari database
                 $validatedData['image'] = $product->image;
             }
 
-            // Eksekusi pembaruan ke database
             $product->update($validatedData);
 
             return redirect()->route('products.index')->with('success', 'Product updated successfully!');
@@ -139,13 +134,16 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        if ($product->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki hak akses untuk menghapus produk ini.');
+        }
+
         try {
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
 
             $product->delete();
-
             return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
             
         } catch (\Exception $e) {

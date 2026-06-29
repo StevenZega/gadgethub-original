@@ -10,6 +10,42 @@
 </head>
 <body class="bg-[#0f172a] text-white font-sans selection:bg-blue-600 selection:text-white">
 
+@if(session('success'))
+<div class="fixed top-5 right-5 z-50 bg-green-600 text-white px-6 py-3 rounded-xl shadow-xl">
+    {{ session('success') }}
+</div>
+
+<script>
+setTimeout(()=>{
+    document.querySelector('.fixed.top-5.right-5').remove();
+},2500);
+</script>
+@endif
+
+@if(session('error'))
+<div class="fixed top-5 right-5 z-50 bg-red-600 text-white px-6 py-3 rounded-xl shadow-xl">
+    {{ session('error') }}
+</div>
+
+<script>
+setTimeout(()=>{
+    document.querySelector('.fixed.top-5.right-5').remove();
+},2500);
+</script>
+@endif
+
+@if(session('info'))
+<div class="fixed top-5 right-5 z-50 bg-cyan-600 text-white px-6 py-3 rounded-xl shadow-xl">
+    {{ session('info') }}
+</div>
+
+<script>
+setTimeout(()=>{
+    document.querySelector('.fixed.top-5.right-5').remove();
+},2500);
+</script>
+@endif
+
     <nav class="bg-[#0f172a]/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -108,12 +144,34 @@
                         <span class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
                     </a>
 
-                     <a href="{{ route('orders.index') }}"
-                        class="text-slate-400 hover:text-cyan-400 text-xl p-1.5 transition flex items-center relative group"
-                        title="Riwayat Pesanan">
-                        <i class="bi bi-box-seam-fill"></i>
-                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-cyan-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
-                    </a>
+                   {{-- Compare --}}
+<a href="{{ route('compare.index') }}"
+class="relative text-slate-400 hover:text-cyan-400 text-xl p-1.5 transition flex items-center group"
+title="Bandingkan Produk">
+
+    <i class="bi bi-columns-gap"></i>
+
+    @if(count(session('compare', [])) > 0)
+        <span
+            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-bold">
+            {{ count(session('compare', [])) }}
+        </span>
+    @endif
+
+</a>
+
+{{-- Riwayat Pesanan --}}
+<a href="{{ route('orders.index') }}"
+class="text-slate-400 hover:text-blue-400 text-xl p-1.5 transition flex items-center relative group"
+title="Riwayat Pesanan">
+
+    <i class="bi bi-box-seam"></i>
+
+    <span
+        class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition">
+    </span>
+
+</a>
 
                     <a href="{{ route('user.profile') }}" class="text-sm text-slate-400 hover:text-blue-400 transition-colors duration-200 flex items-center group/profile" title="Lihat Profil Saya">
                         <i class="bi bi-person-circle text-blue-400 mr-1.5 group-hover/profile:scale-110 transition-transform"></i> 
@@ -251,6 +309,36 @@
 
                         <div class="p-4 pt-4 mt-3">
                             <div class="grid grid-cols-1 gap-2">
+                                @if(in_array($product->id, session('compare', [])))
+
+<button
+class="w-full mt-2 bg-cyan-600 text-white font-semibold py-2 rounded-xl cursor-not-allowed"
+disabled>
+
+<i class="bi bi-check-circle-fill"></i>
+
+Sudah Ditambahkan
+
+</button>
+
+@else
+
+<form action="{{ route('compare.add',$product->id) }}" method="POST">
+@csrf
+
+<button
+type="submit"
+class="w-full mt-2 border border-cyan-500 text-cyan-400 font-semibold py-2 rounded-xl hover:bg-cyan-500 hover:text-white transition">
+
+<i class="bi bi-columns-gap"></i>
+
+Bandingkan
+
+</button>
+
+</form>
+
+@endif
                                 <form action="{{ route('cart.add', $product->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="w-full flex items-center justify-center gap-1.5 border border-white/10 text-slate-300 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-white/10 hover:text-white transition">

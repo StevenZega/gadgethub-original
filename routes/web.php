@@ -8,6 +8,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CompareController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\CustomerProfileController;
 use App\Http\Controllers\CheckoutController;
@@ -70,6 +71,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/user/cart/add/{productId}', [CartController::class, 'addToCart'])
         ->name('cart.add');
+
+    Route::get('/compare', [CompareController::class, 'index'])
+            ->name('compare.index');
+
+        Route::post('/compare/add/{product}', [CompareController::class, 'add'])
+            ->name('compare.add');
+
+        Route::delete('/compare/remove/{product}', [CompareController::class, 'remove'])
+            ->name('compare.remove');
+
+        Route::delete('/compare/clear', [CompareController::class, 'clear'])
+            ->name('compare.clear');
 
     Route::patch('/user/cart/update/{id}', [CartController::class, 'update'])
         ->name('cart.update');

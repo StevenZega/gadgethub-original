@@ -401,23 +401,6 @@ Kosongkan
 
     <div class="mt-8">
 
-        <form
-            action="{{ route('compare.clear') }}"
-            method="POST">
-
-            @csrf
-
-            @method('DELETE')
-
-            <button
-                class="bg-red-700 hover:bg-red-800 px-6 py-3 rounded-xl">
-
-                Kosongkan Semua
-
-            </button>
-
-        </form>
-
     </div>
 
     @endif

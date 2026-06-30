@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\CustomerProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Admin\AdminProfileController;
 
 
 /*
@@ -125,4 +126,19 @@ Route::prefix('admin')
         Route::resource('promos', PromoController::class);
 
         Route::resource('customer-profiles', CustomerProfileController::class);
+
+        Route::get('/profile', [HomeController::class, 'adminProfile'])
+            ->name('admin.profile');
+
+        Route::post('/profile/update', [HomeController::class, 'updateAdminProfile'])
+            ->name('admin.profile.update');
+
+        Route::get('/profile', [AdminProfileController::class, 'index'])
+            ->name('admin.profile');
+
+        Route::get('/profile/edit', [AdminProfileController::class,'edit'])
+            ->name('admin.profile.edit');
+
+        Route::put('/profile/update', [AdminProfileController::class,'update'])
+            ->name('admin.profile.update');
 });

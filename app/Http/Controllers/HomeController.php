@@ -131,4 +131,16 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui!');
     }
+
+    public function adminProfile()
+    {
+        $user = Auth::user();
+
+        return view('admin.profile', compact('user'));
+    }
+
+    public function updateAdminProfile(Request $request)
+    {
+        
+    }
 }

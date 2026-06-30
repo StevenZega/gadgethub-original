@@ -31,4 +31,9 @@ class Product extends Model
     'os',
     'vga',
     ];
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
 }

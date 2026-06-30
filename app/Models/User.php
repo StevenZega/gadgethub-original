@@ -37,4 +37,9 @@ class User extends Authenticatable
     'address',  // Tambahkan ini
     'phone',    // Tambahkan ini
     ];
+
+    public function storeSetting()
+    {
+        return $this->hasOne(StoreSetting::class, 'user_id');
+    }
 }

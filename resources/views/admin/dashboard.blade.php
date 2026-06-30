@@ -61,10 +61,11 @@
             <i class="bi bi-ticket-perforated-fill"></i> Promo
         </a>
 
-        <a href="{{ route('customer-profiles.index') }}" class="nav-link {{ Request::is('admin/customer-profiles*') ? 'active' : '' }}">
-            <i class="bi bi-people-fill"></i> Customer
+        <a href="{{ route('admin.profile') }}" class="nav-link {{ Request::is('admin/profile*') ? 'active' : '' }}">
+            <i class="bi bi-person-fill"></i> Profil Admin
+        </a>
 
-        <a href="#" class="nav-link">
+        <a href="{{ url('/admin/dashboard') }}" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
             <i class="bi bi-bar-chart-line-fill"></i> Statistik
         </a>
 
@@ -77,19 +78,9 @@
     </div>
 
     <div class="main-content">
-        <div class="topbar">
-            <div>
-                <h4 class="m-0 fw-bold">Panel Kontrol Utama</h4>
-                <small class="text-white">Kelola produk dan pantau statistik penjualan gadget</small>
-            </div>
-            <div>
-                <span class="badge bg-secondary px-3 py-2 rounded-pill">Status: Admin Aktif</span>
-            </div>
-        </div>
-
         @if(View::hasSection('content'))
             @yield('content')
-        @else
+@else
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
                     <div class="card-modern">
@@ -97,25 +88,27 @@
                             <h6 class="text-white text-uppercase small mb-0 tracking-wider">Total Produk</h6>
                             <i class="bi bi-box text-primary fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0">-</h2>
+                        <h2 class="fw-bold display-6 m-0">{{ $totalProduk }}</h2>
                     </div>
                 </div>
+                
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Penjualan Hari Ini</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Pendapatan</h6>
                             <i class="bi bi-currency-dollar text-success fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0 text-success">Rp -</h2>
+                        <h2 class="fw-bold display-6 m-0 text-success">Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}</h2>
                     </div>
                 </div>
+                
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Butuh Verifikasi</h6>
                             <i class="bi bi-cart-check text-info fs-4"></i>
                         </div>
-                        <h2 class="fw-bold display-6 m-0 text-info">-</h2>
+                        <h2 class="fw-bold display-6 m-0 text-info">{{ $pesananMasuk }}</h2>
                     </div>
                 </div>
             </div>

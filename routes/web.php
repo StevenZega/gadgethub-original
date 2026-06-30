@@ -8,10 +8,13 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CompareController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\CustomerProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\DashboardController;
 
 
 /*
@@ -53,9 +56,8 @@ Route::get('/dashboard', function () {
 
 })->middleware('auth');
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'admin']);
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'admin']);
 
 Route::middleware(['auth'])->group(function () {
 
@@ -71,6 +73,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/cart/add/{productId}', [CartController::class, 'addToCart'])
         ->name('cart.add');
 
+    Route::get('/compare', [CompareController::class, 'index'])
+            ->name('compare.index');
+
+        Route::post('/compare/add/{product}', [CompareController::class, 'add'])
+            ->name('compare.add');
+
+        Route::delete('/compare/remove/{product}', [CompareController::class, 'remove'])
+            ->name('compare.remove');
+
+        Route::delete('/compare/clear', [CompareController::class, 'clear'])
+            ->name('compare.clear');
+
     Route::patch('/user/cart/update/{id}', [CartController::class, 'update'])
         ->name('cart.update');
 
@@ -81,8 +95,8 @@ Route::middleware(['auth'])->group(function () {
     
     // TAMBAHAN: Route untuk memproses update data profil user
     Route::post('/user/profile/update', [HomeController::class, 'updateProfile'])->name('user.profile.update');
-    //Checkout
-
+    
+    // Checkout
     Route::get('/checkout/buy-now/{product}',
         [CheckoutController::class, 'buyNow'])
         ->name('checkout.buyNow');
@@ -95,6 +109,11 @@ Route::middleware(['auth'])->group(function () {
         [CheckoutController::class, 'process'])
         ->name('checkout.process');
 
+    // BARU: Route untuk memproses validasi kode promo dari form checkout
+    Route::post('/checkout/apply-promo',
+        [CheckoutController::class, 'applyPromo'])
+        ->name('checkout.apply-promo');
+
     // Payment
     Route::get('/payment/{order}', [PaymentController::class, 'show'])
         ->name('payment.show');
@@ -105,6 +124,9 @@ Route::middleware(['auth'])->group(function () {
     // Riwayat Pesanan
     Route::get('/user/orders', [OrderController::class, 'index'])
         ->name('orders.index');
+
+
+    Route::post('/user/reviews/store/{productId}', [HomeController::class, 'storeReview'])->name('user.reviews.store');
 });
 
 Route::prefix('admin')
@@ -125,4 +147,19 @@ Route::prefix('admin')
         Route::resource('promos', PromoController::class);
 
         Route::resource('customer-profiles', CustomerProfileController::class);
+
+        Route::get('/profile', [HomeController::class, 'adminProfile'])
+            ->name('admin.profile');
+
+        Route::post('/profile/update', [HomeController::class, 'updateAdminProfile'])
+            ->name('admin.profile.update');
+
+        Route::get('/profile', [AdminProfileController::class, 'index'])
+            ->name('admin.profile');
+
+        Route::get('/profile/edit', [AdminProfileController::class,'edit'])
+            ->name('admin.profile.edit');
+
+        Route::put('/profile/update', [AdminProfileController::class,'update'])
+            ->name('admin.profile.update');
 });

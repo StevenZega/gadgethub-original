@@ -23,7 +23,6 @@
 
     <div class="w-full max-w-5xl grid md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl">
 
-        <!-- LEFT -->
         <div class="hidden md:flex flex-col justify-center bg-gradient-to-br from-cyan-500 to-blue-700 p-12 text-white">
             <h1 class="text-5xl font-bold leading-tight">
                 GadgetHub
@@ -51,7 +50,6 @@
             </div>
         </div>
 
-        <!-- RIGHT -->
         <div class="glass p-10 md:p-14 text-white">
 
             <div class="mb-10">

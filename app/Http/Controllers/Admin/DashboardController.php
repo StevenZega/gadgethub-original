@@ -12,9 +12,10 @@ class DashboardController extends Controller
     {
         $totalProduk = Product::count();
 
-        $pesananMasuk = Order::count();
+        $pesananMasuk = Order::where('status', 'verifying')->count();
 
-        $penjualanHariIni = Order::whereDate('created_at', today())
+        $penjualanHariIni = Order::where('status', 'paid')
+            ->whereDate('created_at', today())
             ->sum('total');
 
         return view('admin.dashboard', compact(

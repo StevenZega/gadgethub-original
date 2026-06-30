@@ -26,13 +26,29 @@
         Checkout
     </h1>
 
-    <form action="{{ route('checkout.process') }}" method="POST">
+    {{-- Alert Notifikasi Promo Sukses / Gagal --}}
+    @if(session('success'))
+        <div class="bg-green-500/20 border border-green-500 text-green-400 p-4 rounded-2xl mb-6">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-2xl mb-6">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    {{-- FORM UTAMA CHECKOUT --}}
+    <form action="{{ route('checkout.process') }}" method="POST" id="main-checkout-form">
         @csrf
         
         <input type="hidden" name="checkout_type" value="{{ $checkout_type ?? 'cart' }}">
         @if(isset($checkout_type) && $checkout_type === 'buy_now')
             <input type="hidden" name="product_id" value="{{ $product_id ?? '' }}">
         @endif
+
+        {{-- Kirim ID Promo yang sedang aktif ke form submit final --}}
+        <input type="hidden" name="applied_promo_id" value="{{ session('applied_promo_id') }}">
 
         <div class="grid md:grid-cols-3 gap-8">
 
@@ -48,13 +64,8 @@
                     @foreach($products as $item)
 
                         @php
-                            $product = is_array($item)
-                                ? $item['product']
-                                : $item->product;
-
-                            $qty = is_array($item)
-                                ? $item['quantity']
-                                : $item->quantity;
+                            $product = is_array($item) ? $item['product'] : $item->product;
+                            $qty = is_array($item) ? $item['quantity'] : $item->quantity;
                         @endphp
 
                         <div class="flex items-center gap-4 py-4 border-b border-white/10">
@@ -103,7 +114,7 @@
                                 type="text"
                                 name="receiver_name"
                                 required
-                                value="{{ $user->name }}"
+                                value="{{ old('receiver_name', $user->name) }}"
                                 class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white"
                                 placeholder="Masukkan nama penerima">
                         </div>
@@ -117,7 +128,7 @@
                                 type="text"
                                 name="phone"
                                 required
-                                value="{{ $user->phone }}"
+                                value="{{ old('phone', $user->phone) }}"
                                 class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white"
                                 placeholder="08xxxxxxxxxx">
                         </div>
@@ -134,7 +145,7 @@
                             name="address"
                             rows="4"
                             required
-                            class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white">{{ $user->address }}</textarea>
+                            class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white">{{ old('address', $user->address) }}</textarea>
 
                     </div>
 
@@ -148,7 +159,7 @@
                             name="notes"
                             rows="2"
                             class="w-full bg-[#1e293b] border border-white/10 rounded-xl px-4 py-3 text-white"
-                            placeholder="Contoh: Rumah cat putih, pagar hitam"></textarea>
+                            placeholder="Contoh: Rumah cat putih, pagar hitam">{{ old('notes') }}</textarea>
 
                     </div>
 
@@ -166,6 +177,32 @@
                         Ringkasan Pesanan
                     </h3>
 
+                    {{-- FITUR BARU: Input Kode Promo --}}
+                    <div class="mb-6">
+                        <label class="block text-sm text-slate-400 mb-2">
+                            Punya Kode Promo / Diskon?
+                        </label>
+                        <div class="flex gap-2">
+                            <input 
+                                type="text" 
+                                name="promo_code" 
+                                id="promo_code_input"
+                                value="{{ session('applied_promo_code') }}"
+                                class="flex-1 bg-[#1e293b] border border-white/10 rounded-xl px-4 py-2 text-white uppercase placeholder:normal-case text-sm focus:border-blue-500 focus:outline-none" 
+                                placeholder="CONTOH: HEMAT50">
+                            
+                            {{-- Button ini memicu fungsi javascript di bawah untuk submit klaim promo --}}
+                            <button 
+                                type="button"
+                                onclick="applyPromoSubmit()"
+                                class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2 rounded-xl text-sm transition">
+                                Pakai
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="border-white/10 my-4">
+
                     <div class="space-y-3">
 
                         <div class="flex justify-between">
@@ -175,10 +212,16 @@
                             </span>
                         </div>
 
+                        {{-- Ambil nilai diskon dari session jika sukses diklaim --}}
+                        @php
+                            $discount_amount = session('discount_amount', 0);
+                            $total = $subtotal - $discount_amount;
+                        @endphp
+
                         <div class="flex justify-between">
                             <span class="text-slate-400">Diskon</span>
                             <span class="text-green-400">
-                                Rp 0
+                                - Rp {{ number_format($discount_amount,0,',','.') }}
                             </span>
                         </div>
 
@@ -198,7 +241,7 @@
                         <span>Total</span>
 
                         <span class="text-cyan-400">
-                            Rp {{ number_format($subtotal,0,',','.') }}
+                            Rp {{ number_format($total,0,',','.') }}
                         </span>
 
                     </div>
@@ -220,6 +263,22 @@
     </form>
 
 </div>
+
+{{-- SCRIPT BANTUAN UNTUK MEMANIPULASI FORM ACTION SAAT CEK PROMO --}}
+<script>
+    function applyPromoSubmit() {
+        const promoInput = document.getElementById('promo_code_input').value;
+        if (!promoInput) {
+            alert('Silakan ketik kode promo terlebih dahulu!');
+            return;
+        }
+
+        // Alihkan form utama sementara ke route pengecekan promo
+        const form = document.getElementById('main-checkout-form');
+        form.action = "{{ route('checkout.apply-promo') }}"; 
+        form.submit();
+    }
+</script>
 
 </body>
 </html>

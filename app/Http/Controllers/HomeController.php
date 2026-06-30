@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage; // TAMBAHAN: Untuk keperluan manajemen file foto
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -66,10 +67,13 @@ class HomeController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('reviews.user')->findOrFail($id);
         $seller = User::where('role', 'admin')->first();
 
-        return view('user.show', compact('product', 'seller'));
+        // Hitung rata-rata rating
+        $averageRating = $product->reviews->avg('rating') ?? 0;
+
+        return view('user.show', compact('product', 'seller', 'averageRating'));
     }
 
     public function searchProducts(Request $request)
@@ -95,7 +99,7 @@ class HomeController extends Controller
         return view('user.profile', compact('user'));
     }
 
-    // TAMBAHAN: Fungsi untuk memproses perubahan profil dari form user
+    // Fungsi untuk memproses perubahan profil dari form user
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -130,5 +134,61 @@ class HomeController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui!');
+    }
+
+    // Simpan data ulasan baru ke database dari user
+    public function storeReview(Request $request, $productId)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        Review::create([
+            'user_id' => auth()->id(),
+            'product_id' => $productId,
+            'rating' => $request->rating,
+            'comment' => $request->comment ?? '',
+        ]);
+
+        return redirect()->back()->with('success', 'Terima kasih, ulasan Anda berhasil disimpan!');
+    }
+
+    // Menampilkan halaman profil khusus Admin
+    public function adminProfile()
+    {
+        $user = Auth::user();
+        return view('admin.profile', compact('user'));
+    }
+
+    // Memproses update data profil Admin
+    public function updateAdminProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+
+        if ($request->hasFile('photo')) {
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
+            $path = $request->file('photo')->store('profiles', 'public');
+            $user->photo = $path;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profil Admin berhasil diperbarui!');
     }
 }

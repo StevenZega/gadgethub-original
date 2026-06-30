@@ -6,14 +6,19 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Promo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
     public function buyNow(Product $product)
     {
         $subtotal = $product->price;
+
+        // Bersihkan session promo lama agar tidak terbawa saat ganti produk/mode checkout
+        session()->forget(['applied_promo_id', 'discount_amount', 'applied_promo_code']);
 
         return view('user.checkout', [
             'products' => collect([
@@ -24,8 +29,8 @@ class CheckoutController extends Controller
             ]),
             'user' => auth()->user(),
             'subtotal' => $subtotal,
-            'checkout_type' => 'buy_now', // Tambahan
-            'product_id' => $product->id  // Tambahan
+            'checkout_type' => 'buy_now',
+            'product_id' => $product->id
         ]);
     }
 
@@ -39,17 +44,63 @@ class CheckoutController extends Controller
             return $item->product->price * $item->quantity;
         });
 
+        session()->forget(['applied_promo_id', 'discount_amount', 'applied_promo_code']);
+
         return view('user.checkout', [
             'user' => auth()->user(),
             'products' => $cartItems,
             'subtotal' => $subtotal,
-            'checkout_type' => 'cart' // Tambahan
+            'checkout_type' => 'cart'
         ]);
+    }
+
+    public function applyPromo(Request $request)
+    {
+        $code = strtoupper($request->promo_code);
+        $userId = auth()->id();
+        $subtotal = 0;
+        $productsCollection = collect();
+
+        if ($request->checkout_type === 'buy_now') {
+            $product = Product::findOrFail($request->product_id);
+            $subtotal = $product->price;
+            $productsCollection = collect([['product' => $product, 'quantity' => 1]]);
+        } else {
+            $cartItems = Cart::with('product')->where('user_id', $userId)->get();
+            $subtotal = $cartItems->sum(function ($item) {
+                return $item->product->price * $item->quantity;
+            });
+            $productsCollection = $cartItems;
+        }
+
+        $promo = Promo::where('code', $code)
+            ->where('is_active', 1)
+            ->where('quota', '>', 0)
+            ->where('start_date', '<=', Carbon::now())
+            ->where('end_date', '>=', Carbon::now())
+            ->first();
+
+        if (!$promo) {
+            return back()->withInput()->with('error', 'Kode promo tidak valid, kadaluwarsa, atau kuota habis.');
+        }
+
+        $discountAmount = ($subtotal * $promo->discount_percent) / 100;
+
+        session()->put('applied_promo_id', $promo->id);
+        session()->put('discount_amount', $discountAmount);
+        session()->put('applied_promo_code', $promo->code);
+
+        return view('user.checkout', [
+            'products' => $productsCollection,
+            'user' => auth()->user(),
+            'subtotal' => $subtotal,
+            'checkout_type' => $request->checkout_type,
+            'product_id' => $request->product_id
+        ])->with('success', "Promo '{$promo->name}' berhasil digunakan! Diskon {$promo->discount_percent}% diterapkan.");
     }
 
     public function process(Request $request)
     {
-        // 1. Validasi Input Alamat
         $request->validate([
             'receiver_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
@@ -61,7 +112,6 @@ class CheckoutController extends Controller
         $subtotal = 0;
         $orderItemsData = [];
 
-        // 2. Tentukan item yang dibeli & hitung subtotal
         if ($request->checkout_type === 'buy_now') {
             $product = Product::findOrFail($request->product_id);
             $subtotal = $product->price;
@@ -92,8 +142,19 @@ class CheckoutController extends Controller
             }
         }
 
-        // 3. Buat Record di tabel Orders
-        $orders = Order::create([
+        $discount = 0;
+        if (session()->has('applied_promo_id')) {
+            $promo = Promo::find(session('applied_promo_id'));
+            if ($promo && $promo->quota > 0) {
+                $discount = session('discount_amount', 0);
+                // Potong kuota kupon promo milik admin
+                $promo->decrement('quota');
+            }
+        }
+
+        $total = $subtotal - $discount;
+
+        $order = Order::create([
             'user_id' => $userId,
             'invoice_number' => 'INV-' . strtoupper(Str::random(10)),
             'receiver_name' => $request->receiver_name,
@@ -101,23 +162,22 @@ class CheckoutController extends Controller
             'address' => $request->address,
             'notes' => $request->notes,
             'subtotal' => $subtotal,
-            'discount' => 0,
-            'total' => $subtotal, // Subtotal - discount
-            'status' => 'pending' // Menunggu pembayaran
+            'discount' => $discount,
+            'total' => $total, 
+            'status' => 'pending'
         ]);
 
-        // 4. Buat Record di tabel Order_Items
         foreach ($orderItemsData as $itemData) {
-            $orders->items()->create($itemData); 
-            // Pastikan Anda punya public function items() { return $this->hasMany(OrderItem::class); } di model Order
+            $order->items()->create($itemData); 
         }
 
-        // 5. Bersihkan keranjang jika asalnya dari cart
         if ($request->checkout_type === 'cart') {
             Cart::where('user_id', $userId)->delete();
         }
 
-        // 6. Redirect ke halaman Payment
-        return redirect()->route('payment.show', $orders->id);
+        session()->forget(['applied_promo_id', 'discount_amount', 'applied_promo_code']);
+
+        // 8. Redirect ke halaman Payment
+        return redirect()->route('payment.show', $order->id);
     }
 }

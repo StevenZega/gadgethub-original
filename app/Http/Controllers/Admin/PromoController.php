@@ -19,7 +19,11 @@ class PromoController extends Controller
 
     public function create()
     {
-        $products = Product::orderBy('name', 'asc')->get();
+        // Ganti 'user_id' menjadi 'admin_id' sesuai dengan Model Product
+        $products = Product::where('admin_id', auth()->id())
+            ->orderBy('name', 'asc')
+            ->get();
+
         return view('admin.promos.create', compact('products'));
     }
 
@@ -58,7 +62,6 @@ class PromoController extends Controller
 
     public function show(Promo $promo)
     {
-        // Memuat relasi 'product' agar nama produk spesifik (seperti ROG) bisa langsung dipanggil di View
         $promo->load('product');
         
         return view('admin.promos.show', compact('promo'));
@@ -66,7 +69,10 @@ class PromoController extends Controller
 
     public function edit(Promo $promo)
     {
-        $products = Product::orderBy('name', 'asc')->get();
+        $products = Product::where('admin_id', auth()->id())
+            ->orderBy('name', 'asc')
+            ->get();
+
         return view('admin.promos.edit', compact('promo', 'products'));
     }
 

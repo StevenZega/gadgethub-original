@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\CustomerProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\DashboardController;
 
 
 /*
@@ -55,9 +56,8 @@ Route::get('/dashboard', function () {
 
 })->middleware('auth');
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'admin']);
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'admin']);
 
 Route::middleware(['auth'])->group(function () {
 
@@ -95,8 +95,8 @@ Route::middleware(['auth'])->group(function () {
     
     // TAMBAHAN: Route untuk memproses update data profil user
     Route::post('/user/profile/update', [HomeController::class, 'updateProfile'])->name('user.profile.update');
-    //Checkout
-
+    
+    // Checkout
     Route::get('/checkout/buy-now/{product}',
         [CheckoutController::class, 'buyNow'])
         ->name('checkout.buyNow');
@@ -108,6 +108,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout/process',
         [CheckoutController::class, 'process'])
         ->name('checkout.process');
+
+    // BARU: Route untuk memproses validasi kode promo dari form checkout
+    Route::post('/checkout/apply-promo',
+        [CheckoutController::class, 'applyPromo'])
+        ->name('checkout.apply-promo');
 
     // Payment
     Route::get('/payment/{order}', [PaymentController::class, 'show'])

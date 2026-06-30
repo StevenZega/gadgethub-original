@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 class AdminOrderController extends Controller
 {
     public function index()
     {
-        // FILTER PESANAN: Hanya tampil jika item pesanan berisi produk milik admin aktif
         $orders = Order::with(['items.product'])->latest()->get();
 
         return view('admin.orders.index', compact('orders'));
@@ -17,8 +17,23 @@ class AdminOrderController extends Controller
 
     public function approve(Order $order)
     {
-        $order->update(['status' => 'paid']);
-        return back()->with('success', 'Pesanan berhasil diterima');
+        if ($order->status === 'paid') {
+            return back()->with('error', 'Pesanan ini sudah berstatus dibayar.');
+        }
+
+        DB::transaction(function () use ($order) {
+            $order->update(['status' => 'paid']);
+
+            foreach ($order->items as $item) {
+                $product = $item->product;
+                
+                if ($product) {
+                    $product->decrement('stock', $item->quantity);
+                }
+            }
+        });
+
+        return back()->with('success', 'Pesanan berhasil diterima dan stok produk telah otomatis dikurangi.');
     }
 
     public function reject(Order $order)

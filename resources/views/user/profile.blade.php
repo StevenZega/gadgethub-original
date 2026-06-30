@@ -13,7 +13,7 @@
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <a href="{{ route('user.dashboard') }}" class="flex items-center gap-2 text-slate-400 hover:text-blue-400 transition text-sm">
-                    <i class="bi bi-arrow-left"></i> Kembali ke Toko
+                    <i class="bi bi-arrow-left"></i> Kembali
                 </a>
                 <span class="text-xs font-bold tracking-widest text-slate-500 uppercase">Profil Akun</span>
             </div>
@@ -53,14 +53,11 @@
                     </div>
                     <div class="text-center md:text-left">
                         <h1 class="text-3xl font-black tracking-tight mb-1">{{ $user->name }}</h1>
-                        <p class="inline-flex items-center gap-1.5 py-0.5 px-2.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> Member GadgetHub VIP
-                        </p>
                     </div>
                 </div>
                 
                 <button type="button" onclick="openModal()" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 py-2.5 rounded-xl text-sm shadow-lg shadow-blue-600/20 transition transform active:scale-95">
-                    <i class="bi bi-pencil-square"></i> Edit Profil Saya
+                    <i class="bi bi-pencil-square"></i> Edit Profil
                 </button>
             </div>
 
@@ -89,8 +86,7 @@
 
                 <div class="bg-white/4 p-5 border border-white/5 rounded-2xl md:col-span-2">
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Alamat Pengiriman Paket (Default)</span>
-                        <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md font-bold uppercase">Aktif</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Alamat Default</span>
                     </div>
                     <p class="text-sm font-medium text-slate-300 leading-relaxed">
                         {{ $user->address ?? 'Belum mengatur alamat default. Silakan edit profil untuk menambahkan alamat utama Anda.' }}
@@ -167,13 +163,13 @@
         function openModal() {
             const modal = document.getElementById('editModal');
             modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Kunci scroll layar utama
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeModal() {
             const modal = document.getElementById('editModal');
             modal.classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Aktifkan kembali scroll
+            document.body.style.overflow = 'auto'; 
         }
     </script>
 </body>

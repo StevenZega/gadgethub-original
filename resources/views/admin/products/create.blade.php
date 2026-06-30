@@ -66,7 +66,7 @@
                         </div>
                         
                         <div class="col-md-6 mb-3">
-                            <label for="brand" class="form-label fw-bold text-white text-uppercase tracking-wider small">Brand / Merek</label>
+                            <label for="brand" class="form-label fw-bold text-white text-uppercase tracking-wider small">Brand</label>
                             <input type="text" name="brand" class="form-control text-white input-custom-dark" id="brand" value="{{ old('brand') }}" required>
                         </div>
                     </div>

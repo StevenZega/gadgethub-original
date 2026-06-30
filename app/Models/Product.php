@@ -31,9 +31,16 @@ class Product extends Model
     'os',
     'vga',
     ];
+<<<<<<< HEAD
     
     public function reviews()
     {
         return $this->hasMany(Review::class);
+=======
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+>>>>>>> 9448f34f34f4ec2e361493645f195cdb7859aaf9
     }
 }

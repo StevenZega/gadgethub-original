@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\StoreSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,31 +15,34 @@ class PaymentController extends Controller
             abort(403);
         }
 
-        return view('user.payment', compact('order'));
+        // UBAH BARIS INI: Ambil setting dari admin pemilik produk pertama di dalam order
+        $order->load('items.product.admin.storeSetting');
+        
+        $firstItem = $order->items->first();
+        $setting = $firstItem && $firstItem->product && $firstItem->product->admin 
+            ? $firstItem->product->admin->storeSetting 
+            : null;
+
+        return view('user.payment', compact('order', 'setting'));
     }
 
+    // Fungsi uploadProof di bawahnya biarkan tetap sama, jangan diubah
     public function uploadProof(Request $request, Order $order)
     {
-        // 1. Validasi file harus berupa gambar & maksimal 2MB
         $request->validate([
             'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // 2. Cek apakah ada file yang diunggah
         if ($request->hasFile('payment_proof')) {
-            
-            // Hapus foto lama jika user mengunggah ulang
             if ($order->payment_proof) {
                 Storage::disk('public')->delete($order->payment_proof);
             }
 
-            // Simpan gambar baru ke folder 'payment_proofs' di disk public
             $path = $request->file('payment_proof')->store('payment_proofs', 'public');
 
-            // 3. Update data order di database
             $order->update([
                 'payment_proof' => $path,
-                'status' => 'verifying' // Ubah status menjadi menunggu verifikasi admin
+                'status' => 'verifying'
             ]);
 
             return back()->with('success', 'Bukti transfer berhasil diunggah! Menunggu konfirmasi admin.');

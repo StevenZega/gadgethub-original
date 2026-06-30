@@ -135,6 +135,7 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui!');
     }
+<<<<<<< HEAD
     public function storeReview(Request $request, $productId)
     {
         $request->validate([
@@ -151,5 +152,18 @@ class HomeController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Terima kasih, ulasan Anda berhasil disimpan!');
+=======
+
+    public function adminProfile()
+    {
+        $user = Auth::user();
+
+        return view('admin.profile', compact('user'));
+    }
+
+    public function updateAdminProfile(Request $request)
+    {
+        
+>>>>>>> 9448f34f34f4ec2e361493645f195cdb7859aaf9
     }
 }

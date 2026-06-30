@@ -58,8 +58,26 @@
             </h3>
             
             <div class="bg-white p-4 rounded-2xl inline-block border border-slate-200">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=GadgetHub-Invoice-{{ $order->invoice_number }}" 
-                     alt="QRIS Pembayaran" class="w-48 h-48 mx-auto">
+                @if($setting && $setting->qris_image)
+
+                <img
+                    src="{{ asset($setting->qris_image) }}"
+                    class="w-60 h-60 object-contain mx-auto rounded-xl"
+                    alt="QRIS">
+
+            @else
+
+                <div class="text-center py-10">
+
+                    <i class="bi bi-qr-code text-6xl text-gray-500"></i>
+
+                    <p class="text-slate-400 mt-4">
+                        QRIS belum tersedia.
+                    </p>
+
+                </div>
+
+            @endif
             </div>
 
             <p class="text-sm text-slate-400 max-w-md mx-auto">
@@ -106,24 +124,27 @@
 
         <div id="content-bank" class="space-y-6 hidden">
             <div class="space-y-4 border border-white/10 p-6 rounded-2xl bg-white/5">
-                <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
-                    <i class="bi bi-bank"></i> Rekening Tujuan Transfer
-                </h3>
-                <div class="flex justify-between items-center pb-4 border-b border-white/10">
-                    <div>
-                        <p class="font-bold">Bank BCA</p>
-                        <p class="text-slate-400 text-sm">a.n PT GadgetHub Indonesia</p>
-                    </div>
-                    <p class="font-mono text-lg font-bold text-blue-400">123-456-7890</p>
+
+            <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                <i class="bi bi-bank"></i> Rekening Tujuan Transfer
+            </h3>
+
+            <div class="flex justify-between items-center">
+
+                <div>
+                    <p class="font-bold">Transfer Bank</p>
+                    <p class="text-slate-400 text-sm">
+                        {{ $setting->user->name ?? 'GadgetHub' }}
+                    </p>
                 </div>
-                <div class="flex justify-between items-center pt-2">
-                    <div>
-                        <p class="font-bold">Bank Mandiri</p>
-                        <p class="text-slate-400 text-sm">a.n PT GadgetHub Indonesia</p>
-                    </div>
-                    <p class="font-mono text-lg font-bold text-yellow-500">098-765-4321</p>
-                </div>
+
+                <p class="font-mono text-lg font-bold text-cyan-400">
+                    {{ $setting->bank_account ?? '-' }}
+                </p>
+
             </div>
+
+        </div>
 
             <div class="bg-white/5 border border-white/10 p-6 rounded-2xl">
                 <h3 class="font-bold text-lg mb-4 flex items-center gap-2">

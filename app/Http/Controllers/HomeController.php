@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage; // TAMBAHAN: Untuk keperluan manajemen file foto
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -66,10 +67,13 @@ class HomeController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        $seller = User::where('role', 'admin')->first();
+    $product = Product::with('reviews.user')->findOrFail($id);
+    $seller = User::where('role', 'admin')->first();
 
-        return view('user.show', compact('product', 'seller'));
+    // Hitung rata-rata rating
+    $averageRating = $product->reviews->avg('rating') ?? 0;
+
+    return view('user.show', compact('product', 'seller', 'averageRating'));
     }
 
     public function searchProducts(Request $request)
@@ -130,5 +134,22 @@ class HomeController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui!');
+    }
+    public function storeReview(Request $request, $productId)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        // Simpan data ulasan baru ke database
+        Review::create([
+            'user_id' => auth()->id(),
+            'product_id' => $productId,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->back()->with('success', 'Terima kasih, ulasan Anda berhasil disimpan!');
     }
 }

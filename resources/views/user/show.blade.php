@@ -104,7 +104,47 @@
                     </div>
                 </div>
             </div>
+        </div>
+                <div class="mt-12 bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-md">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="bi bi-star-fill text-amber-400"></i> Ulasan Pembeli
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Apa kata mereka yang sudah membeli produk ini</p>
+                </div>
+                <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-xl w-fit">
+                    <i class="bi bi-star-fill text-amber-400 text-lg"></i>
+                    <span class="text-lg font-black text-amber-400">{{ number_format($averageRating, 1) }}</span>
+                    <span class="text-xs text-slate-400">/ 5.0</span>
+                </div>
+            </div>
 
+            <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                @forelse($product->reviews as $review)
+                    <div class="p-4 bg-white/4 border border-white/5 rounded-xl flex gap-4 items-start">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                            <i class="bi bi-person-fill text-xl"></i>
+                        </div>
+                        <div class="w-full">
+                            <div class="flex items-center justify-between gap-2 mb-1">
+                                <span class="font-semibold text-sm text-slate-200">{{ $review->user->name }}</span>
+                                <span class="text-[10px] text-slate-500">{{ $review->created_at->diffForHumans() }}</span>
+                            </div>
+                            <div class="text-xs text-amber-400 mb-2">
+                                {!! str_repeat('<i class="bi bi-star-fill"></i>', $review->rating) !!}
+                                {!! str_repeat('<i class="bi bi-star text-slate-600"></i>', 5 - $review->rating) !!}
+                            </div>
+                            <p class="text-sm text-slate-300 leading-relaxed">{{ $review->comment ?? 'Pembeli tidak memberikan ulasan tertulis.' }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8 text-slate-500">
+                        <i class="bi bi-chat-left-text text-3xl block mb-2 opacity-50"></i>
+                        <p class="text-sm">Belum ada ulasan untuk produk ini.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
     </main>
 

@@ -84,8 +84,8 @@ setTimeout(()=>{
                         <button type="button"
                             class="bg-white/5 border border-white/10 rounded-xl px-4 h-[38px] text-slate-300 text-sm focus:outline-none focus:border-blue-500 cursor-pointer transition-all flex items-center gap-2 select-none min-w-[160px] justify-between">
                             <span>
-                                @if(request('category') == 'Handphone') 📱 Handphone 
-                                @elseif(request('category') == 'Laptop') 💻 Laptop 
+                                @if(request('category') == 'Handphone') Handphone 
+                                @elseif(request('category') == 'Laptop') Laptop 
                                 @else Semua Kategori @endif
                             </span>
                             <i class="bi bi-chevron-down text-xs transition-transform duration-300 arrow-icon"></i>
@@ -219,7 +219,7 @@ title="Riwayat Pesanan">
                         
                         <div class="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left order-2 md:order-1">
                             <span class="text-xs uppercase font-bold tracking-widest text-cyan-400 mb-2 block">
-                                🔥 Penawaran Teratas
+                                Penawaran Teratas
                             </span>
                             <h2 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight line-clamp-2 mb-3">
                                 {{ $sliderProduct->name }}
@@ -311,34 +311,34 @@ title="Riwayat Pesanan">
                             <div class="grid grid-cols-1 gap-2">
                                 @if(in_array($product->id, session('compare', [])))
 
-<button
-class="w-full mt-2 bg-cyan-600 text-white font-semibold py-2 rounded-xl cursor-not-allowed"
-disabled>
+                                <button
+                                class="w-full mt-2 bg-cyan-600 text-white font-semibold py-2 rounded-xl cursor-not-allowed"
+                                disabled>
 
-<i class="bi bi-check-circle-fill"></i>
+                                <i class="bi bi-check-circle-fill"></i>
 
-Sudah Ditambahkan
+                                Sudah Ditambahkan
 
-</button>
+                                </button>
 
-@else
+                                @else
 
-<form action="{{ route('compare.add',$product->id) }}" method="POST">
-@csrf
+                                <form action="{{ route('compare.add',$product->id) }}" method="POST">
+                                @csrf
 
-<button
-type="submit"
-class="w-full mt-2 border border-cyan-500 text-cyan-400 font-semibold py-2 rounded-xl hover:bg-cyan-500 hover:text-white transition">
+                                <button
+                                type="submit"
+                                class="w-full mt-2 border border-cyan-500 text-cyan-400 font-semibold py-2 rounded-xl hover:bg-cyan-500 hover:text-white transition">
 
-<i class="bi bi-columns-gap"></i>
+                                <i class="bi bi-columns-gap"></i>
 
-Bandingkan
+                                Bandingkan
 
-</button>
+                                </button>
 
-</form>
+                                </form>
 
-@endif
+                                @endif
                                 <form action="{{ route('cart.add', $product->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="w-full flex items-center justify-center gap-1.5 border border-white/10 text-slate-300 font-semibold py-2 px-3 rounded-xl text-xs hover:bg-white/10 hover:text-white transition">
@@ -368,6 +368,9 @@ Bandingkan
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ==========================================
+        // 1. SMOOTH SCROLL SYSTEM (JELAJAHI BUTTON)
+        // ==========================================
         const btnJelajahi = document.getElementById('btn-jelajahi');
         if (btnJelajahi) {
             btnJelajahi.addEventListener('click', function(e) {
@@ -388,34 +391,41 @@ Bandingkan
             });
         }
 
+        // ==========================================
+        // 2. LIVE SEARCH PRODUCTS ENGINE
+        // ==========================================
         const searchInput = document.getElementById('search-input');
         const resultsBox = document.getElementById('search-results');
 
-        searchInput.addEventListener('keyup', async function() {
-            let keyword = this.value;
-            if(keyword.length < 1){
-                resultsBox.classList.add('hidden');
-                return;
-            }
-            let response = await fetch(`/search-products?search=${keyword}`);
-            let products = await response.json();
-            let html = '';
-            products.forEach(product => {
-                html += `
-                    <a href="/user/products/${product.id}" class="block px-4 py-3 hover:bg-white/5 border-b border-white/5">
-                        <div class="font-semibold text-white">${product.name}</div>
-                        <div class="text-xs text-slate-400">${product.brand ?? ''}</div>
-                    </a>
-                `;
+        if (searchInput && resultsBox) {
+            searchInput.addEventListener('keyup', async function() {
+                let keyword = this.value;
+                if(keyword.length < 1){
+                    resultsBox.classList.add('hidden');
+                    return;
+                }
+                let response = await fetch(`/search-products?search=${keyword}`);
+                let products = await response.json();
+                let html = '';
+                products.forEach(product => {
+                    html += `
+                        <a href="/user/products/${product.id}" class="block px-4 py-3 hover:bg-white/5 border-b border-white/5">
+                            <div class="font-semibold text-white">${product.name}</div>
+                            <div class="text-xs text-slate-400">${product.brand ?? ''}</div>
+                        </a>
+                    `;
+                });
+                if(products.length === 0){
+                    html = `<div class="px-4 py-3 text-slate-400">Produk tidak ditemukan</div>`;
+                }
+                resultsBox.innerHTML = html;
+                resultsBox.classList.remove('hidden');
             });
-            if(products.length === 0){
-                html = `<div class="px-4 py-3 text-slate-400">Produk tidak ditemukan</div>`;
-            }
-            resultsBox.innerHTML = html;
-            resultsBox.classList.remove('hidden');
-        });
+        }
 
-        // --- CUSTOM DROPDOWNS SYSTEM ---
+        // ==========================================
+        // 3. PREMIUM CUSTOM DROPDOWNS SYSTEM (FIXED)
+        // ==========================================
         const dropdowns = document.querySelectorAll('.id-custom-dropdown');
         dropdowns.forEach(dropdown => {
             const btn = dropdown.querySelector('button');
@@ -423,46 +433,56 @@ Bandingkan
             const arrow = dropdown.querySelector('.arrow-icon');
             const label = dropdown.querySelector('span');
 
+            // Toggle buka/tutup dropdown saat tombol diklik
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 document.querySelectorAll('.id-custom-dropdown .absolute').forEach(otherMenu => {
                     if (otherMenu !== menu) {
                         otherMenu.classList.add('opacity-0', 'scale-y-0', 'pointer-events-none');
-                        otherMenu.parentElement.querySelector('.arrow-icon').classList.remove('rotate-180');
+                        const otherArrow = otherMenu.parentElement.querySelector('.arrow-icon');
+                        if (otherArrow) otherArrow.classList.remove('rotate-180');
                     }
                 });
                 menu.classList.toggle('opacity-0');
                 menu.classList.toggle('scale-y-0');
                 menu.classList.toggle('pointer-events-none');
-                arrow.classList.toggle('rotate-180');
+                if (arrow) arrow.classList.toggle('rotate-180');
             });
 
+            // Aksi ketika item di dalam dropdown dipilih
             const items = menu.querySelectorAll('.dropdown-item');
             items.forEach(item => {
                 item.addEventListener('click', function() {
                     const value = this.getAttribute('data-value');
                     const text = this.innerHTML;
 
-                    if(item.innerHTML.includes('Kategori')) {
-                        document.getElementById('hidden-category').value = value;
-                    } else if(item.innerHTML.includes('Default') || item.innerHTML.includes('Harga') || item.innerHTML.includes('Nama')) {
-                        document.getElementById('hidden-sort').value = value;
+                    const firstHidden = document.getElementById('hidden-category');
+                    const secondHidden = document.getElementById('hidden-sort');
+                    
+                    // Mengambil text tombol utama untuk mendeteksi konteks filter yang sedang aktif
+                    const parentButtonText = btn.innerHTML;
+
+                    // Perbaikan Bug: Memastikan Laptop & Handphone masuk ke hidden-category secara konsisten
+                    if (parentButtonText.includes('Kategori') || text.includes('Handphone') || text.includes('Laptop') || value === "") {
+                        if (firstHidden) firstHidden.value = value;
                     } else {
-                        const firstHidden = document.getElementById('hidden-category');
-                        const secondHidden = document.getElementById('hidden-sort');
-                        if(this.closest('.id-custom-dropdown').querySelector('button').innerHTML.includes('Kategori') || this.innerHTML.includes('📱') || this.innerHTML.includes('💻')) {
-                            firstHidden.value = value;
-                        } else {
-                            secondHidden.value = value;
-                        }
+                        if (secondHidden) secondHidden.value = value;
                     }
+
                     label.innerHTML = text;
                     menu.classList.add('opacity-0', 'scale-y-0', 'pointer-events-none');
-                    arrow.classList.remove('rotate-180');
+                    if (arrow) arrow.classList.remove('rotate-180');
+                    
+                    // Otomatis submit form filter (jika elemen dropdown dibungkus oleh sebuah form tag)
+                    const filterForm = this.closest('form');
+                    if (filterForm) {
+                        filterForm.submit();
+                    }
                 });
             });
         });
 
+        // Menutup dropdown otomatis jika user mengklik area di luar dropdown
         document.addEventListener('click', function() {
             document.querySelectorAll('.id-custom-dropdown .absolute').forEach(menu => {
                 menu.classList.add('opacity-0', 'scale-y-0', 'pointer-events-none');
@@ -472,7 +492,9 @@ Bandingkan
             });
         });
 
-        // --- PREMIUM SLIDER SYSTEM ENGINE ---
+        // ==========================================
+        // 4. PREMIUM SLIDER SYSTEM ENGINE
+        // ==========================================
         const sliderContainer = document.getElementById('slider-container');
         if (sliderContainer) {
             const slides = sliderContainer.children;
@@ -483,6 +505,7 @@ Bandingkan
             let currentIdx = 0;
             let slideInterval;
 
+            // Membuat navigasi dots secara otomatis berdasarkan total slide
             for (let i = 0; i < totalSlides; i++) {
                 const dot = document.createElement('button');
                 dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-blue-500 w-6' : 'bg-white/30'}`;
@@ -490,22 +513,24 @@ Bandingkan
                     goToSlide(i);
                     resetAutoplay();
                 });
-                dotsContainer.appendChild(dot);
+                if (dotsContainer) dotsContainer.appendChild(dot);
             }
 
-            const dots = dotsContainer.children;
+            const dots = dotsContainer ? dotsContainer.children : [];
 
             function updateSliderVisuals() {
                 sliderContainer.style.transform = `translateX(-${currentIdx * 100}%)`;
-                Array.from(dots).forEach((dot, i) => {
-                    if (i === currentIdx) {
-                        dot.classList.add('bg-blue-500', 'w-6');
-                        dot.classList.remove('bg-white/30');
-                    } else {
-                        dot.classList.remove('bg-blue-500', 'w-6');
-                        dot.classList.add('bg-white/30');
-                    }
-                });
+                if (dots.length > 0) {
+                    Array.from(dots).forEach((dot, i) => {
+                        if (i === currentIdx) {
+                            dot.classList.add('bg-blue-500', 'w-6');
+                            dot.classList.remove('bg-white/30');
+                        } else {
+                            dot.classList.remove('bg-blue-500', 'w-6');
+                            dot.classList.add('bg-white/30');
+                        }
+                    });
+                }
             }
 
             function goToSlide(idx) {
@@ -526,19 +551,24 @@ Bandingkan
                 startAutoplay();
             }
 
-            prevBtn.addEventListener('click', () => {
-                goToSlide(currentIdx - 1);
-                resetAutoplay();
-            });
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    goToSlide(currentIdx - 1);
+                    resetAutoplay();
+                });
+            }
 
-            nextBtn.addEventListener('click', () => {
-                goToSlide(currentIdx + 1);
-                resetAutoplay();
-            });
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    goToSlide(currentIdx + 1);
+                    resetAutoplay();
+                });
+            }
 
             startAutoplay();
         }
     });
     </script>
+    
 </body>
 </html>

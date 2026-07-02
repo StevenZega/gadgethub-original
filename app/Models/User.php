@@ -33,9 +33,9 @@ class User extends Authenticatable
     'name',
     'email',
     'password',
-    'photo',    // Tambahkan ini
-    'address',  // Tambahkan ini
-    'phone',    // Tambahkan ini
+    'photo',    
+    'address',  
+    'phone',    
     ];
 
     public function storeSetting()

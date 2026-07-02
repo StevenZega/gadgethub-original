@@ -23,18 +23,11 @@ class Order extends Model
         'payment_proof',
     ];
 
-    /**
-     * Hubungan ke model OrderItem (One to Many)
-     * Ini fungsi yang sebelumnya hilang dan menyebabkan error
-     */
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    /**
-     * Hubungan ke model User (Opsional, tapi akan berguna ke depannya)
-     */
     public function user()
     {
         return $this->belongsTo(User::class);

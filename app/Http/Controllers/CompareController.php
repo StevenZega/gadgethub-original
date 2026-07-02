@@ -20,12 +20,10 @@ class CompareController extends Controller
     {
         $compare = session()->get('compare', []);
 
-        // Produk sudah ada
         if (in_array($product->id, $compare)) {
             return back()->with('info', 'Produk sudah ada di daftar perbandingan.');
         }
 
-        // Maksimal 3 produk
         if (count($compare) >= 3) {
             return back()->with('error', 'Maksimal hanya 3 produk yang dapat dibandingkan.');
         }

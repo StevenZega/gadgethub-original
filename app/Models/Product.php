@@ -28,19 +28,18 @@ class Product extends Model
         'vga',
     ];
 
-    /**
-     * Relasi ke model Review (Satu produk bisa punya banyak ulasan)
-     */
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * Relasi ke model User/Admin (Produk ini ditambahkan oleh siapa)
-     */
     public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    public function warnings()
+    {
+        return $this->hasMany(DeveloperWarning::class, 'product_id');
     }
 }

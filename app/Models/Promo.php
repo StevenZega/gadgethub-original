@@ -12,6 +12,7 @@ class Promo extends Model
     protected $table = 'promos';
 
     protected $fillable = [
+        'admin_id', 
         'name',
         'code',
         'scope',
@@ -24,12 +25,13 @@ class Promo extends Model
         'end_date',
     ];
 
-    /**
-     * RELASI ELOPUENT: Promo menempel ke data Product
-     * Ini yang bikin nama produk (seperti ROG Phone) bisa dipanggil lewat $promo->product->name
-     */
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
     }
 }

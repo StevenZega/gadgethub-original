@@ -15,7 +15,6 @@ class PaymentController extends Controller
             abort(403);
         }
 
-        // UBAH BARIS INI: Ambil setting dari admin pemilik produk pertama di dalam order
         $order->load('items.product.admin.storeSetting');
         
         $firstItem = $order->items->first();
@@ -26,7 +25,6 @@ class PaymentController extends Controller
         return view('user.payment', compact('order', 'setting'));
     }
 
-    // Fungsi uploadProof di bawahnya biarkan tetap sama, jangan diubah
     public function uploadProof(Request $request, Order $order)
     {
         $request->validate([

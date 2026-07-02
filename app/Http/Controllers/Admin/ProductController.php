@@ -11,14 +11,12 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // FILTER: Hanya mengambil produk milik admin yang sedang login
         $products = Product::where('admin_id', auth()->id())->latest()->get();
         return view('admin.products.index', compact('products'));
     }
 
     public function show($id)
     {
-        // FILTER: Pastikan admin tidak bisa mengintip ID produk milik admin lain lewat URL
         $product = Product::where('admin_id', auth()->id())->findOrFail($id);
         return view('admin.products.show', compact('product'));
     }
@@ -59,7 +57,6 @@ class ProductController extends Controller
 
             unset($data['phone_processor'], $data['laptop_processor']);
 
-            // SUNTIK DATA: Daftarkan id admin yang sedang login ke produk ini
             $data['admin_id'] = auth()->id();
 
             Product::create($data);
@@ -75,7 +72,6 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        // PROTEKSI: Jika admin mencoba mengedit produk milik admin lain, tolak otomatis
         if ($product->admin_id !== auth()->id()) {
             abort(403, 'Anda tidak memiliki hak akses untuk mengedit produk ini.');
         }

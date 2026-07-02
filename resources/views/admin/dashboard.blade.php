@@ -61,12 +61,23 @@
             <i class="bi bi-ticket-perforated-fill"></i> Promo
         </a>
 
-        <a href="{{ route('admin.profile') }}" class="nav-link {{ Request::is('admin/profile*') ? 'active' : '' }}">
-            <i class="bi bi-person-fill"></i> Profil Admin
+        <a href="{{ route('admin.notifications') }}" class="nav-link {{ Request::is('admin/notifications*') ? 'active' : '' }} flex items-center justify-between">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-envelope-paper-fill text-white me-3"></i> <span>Notifikasi</span>
+            </div>
+            
+            @php
+                $unreadWarnings = \App\Models\DeveloperWarning::where('admin_id', auth()->id())->where('is_read', false)->count();
+            @endphp
+            @if($unreadWarnings > 0)
+                <span class="badge bg-warning text-dark font-monospace rounded-pill px-2 py-0.5 text-[11px]" style="font-weight: 700;">
+                    {{ $unreadWarnings }}
+                </span>
+            @endif
         </a>
 
-        <a href="{{ url('/admin/dashboard') }}" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
-            <i class="bi bi-bar-chart-line-fill"></i> Statistik
+        <a href="{{ route('admin.profile') }}" class="nav-link {{ Request::is('admin/profile*') ? 'active' : '' }}">
+            <i class="bi bi-person-fill"></i> Profil
         </a>
 
         <form action="/logout" method="POST" class="mt-4 px-2">
@@ -80,7 +91,7 @@
     <div class="main-content">
         @if(View::hasSection('content'))
             @yield('content')
-@else
+            @else
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
                     <div class="card-modern">
@@ -105,7 +116,7 @@
                 <div class="col-md-4">
                     <div class="card-modern">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Butuh Verifikasi</h6>
+                            <h6 class="text-white text-uppercase small mb-0 tracking-wider">Pesanan Masuk</h6>
                             <i class="bi bi-cart-check text-info fs-4"></i>
                         </div>
                         <h2 class="fw-bold display-6 m-0 text-info">{{ $pesananMasuk }}</h2>

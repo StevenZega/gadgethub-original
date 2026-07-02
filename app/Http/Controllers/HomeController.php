@@ -19,7 +19,6 @@ class HomeController extends Controller
 
         $products = Product::where('stock', '>', 0);
 
-        // Search
         if ($request->search) {
             $products->where(function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->search . '%')
@@ -27,7 +26,6 @@ class HomeController extends Controller
             });
         }
 
-        // Filter category (Sudah Diperbaiki agar fleksibel)
         if ($request->category) {
             if (strtolower($request->category) == 'handphone') {
                 // Jika user pilih 'Handphone', sistem otomatis mencari 'Handphone', 'Smartphone', atau 'Hape'
@@ -37,7 +35,6 @@ class HomeController extends Controller
             }
         }
 
-        // Sorting
         switch ($request->sort) {
             case 'price_asc':
                 $products->orderBy('price', 'asc');
@@ -70,7 +67,6 @@ class HomeController extends Controller
         $product = Product::with('reviews.user')->findOrFail($id);
         $seller = User::where('role', 'admin')->first();
 
-        // Hitung rata-rata rating
         $averageRating = $product->reviews->avg('rating') ?? 0;
 
         return view('user.show', compact('product', 'seller', 'averageRating'));
@@ -92,14 +88,11 @@ class HomeController extends Controller
 
     public function myProfile()
     {
-        // Mengambil data user yang saat ini sedang login
         $user = Auth::user();
         
-        // Mengarahkan ke file view khusus profil user biasa
         return view('user.profile', compact('user'));
     }
 
-    // Fungsi untuk memproses perubahan profil dari form user
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -113,20 +106,17 @@ class HomeController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Maksimal 2MB
         ]);
 
-        // Menyimpan data perubahan teks
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->address = $request->address;
 
-        // Logika Handle Upload Foto Profil Baru
         if ($request->hasFile('photo')) {
             // Hapus foto lama di folder storage jika ada sebelumnya
             if ($user->photo && Storage::disk('public')->exists($user->photo)) {
                 Storage::disk('public')->delete($user->photo);
             }
 
-            // Simpan foto baru ke folder storage/app/public/profiles
             $path = $request->file('photo')->store('profiles', 'public');
             $user->photo = $path;
         }
@@ -136,7 +126,6 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui!');
     }
 
-    // Simpan data ulasan baru ke database dari user
     public function storeReview(Request $request, $productId)
     {
         $request->validate([
@@ -154,14 +143,12 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Terima kasih, ulasan Anda berhasil disimpan!');
     }
 
-    // Menampilkan halaman profil khusus Admin
     public function adminProfile()
     {
         $user = Auth::user();
         return view('admin.profile', compact('user'));
     }
 
-    // Memproses update data profil Admin
     public function updateAdminProfile(Request $request)
     {
         $user = Auth::user();

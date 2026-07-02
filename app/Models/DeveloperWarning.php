@@ -5,25 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model
+class DeveloperWarning extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'product_id',
-        'order_id', 
-        'rating',
-        'comment'
+        'admin_id',
+        'message',
+        'is_read',
     ];
 
+    // Relasi ke produk yang diperingatkan
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function user()
+    // Relasi ke admin yang diberi peringatan
+    public function admin()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'admin_id');
     }
 }

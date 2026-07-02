@@ -60,7 +60,7 @@
                             <div class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/5">
                                 <div class="flex items-center gap-4">
                                     <div class="w-16 h-16 bg-[#1e293b] rounded-lg flex items-center justify-center overflow-hidden p-2 border border-white/10">
-                                        @if($item->product && $item->product->image)
+                                        @if($item->product?->image)
                                             <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-contain">
                                         @else
                                             <i class="bi bi-image text-slate-500 text-xl"></i>
@@ -68,7 +68,7 @@
                                     </div>
                                     <div>
                                         <h4 class="font-semibold text-sm text-slate-200 line-clamp-1">
-                                            {{ $item->product->name ?? 'Produk Telah Dihapus' }}
+                                            {{ $item->product?->name ?? 'Produk Telah Dihapus' }}
                                         </h4>
                                         <p class="text-xs text-slate-400 mt-1">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                                     </div>
@@ -89,7 +89,7 @@
                                             </span>
                                         @else
                                             <button type="button" 
-                                                onclick="openReviewModal('{{ $item->product_id }}', '{{ addslashes($item->product->name) }}', '{{ $order->id }}')" 
+                                                onclick="openReviewModal('{{ $item->product_id }}', '{{ addslashes($item->product?->name ?? 'Produk') }}', '{{ $order->id }}')" 
                                                 class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1 shadow-lg shadow-amber-500/10">
                                                 <i class="bi bi-star-fill text-[10px]"></i> Ulas
                                             </button>

@@ -16,13 +16,6 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 
-
-/*
-|--------------------------------------------------------------------------
-| WEB ROUTES
-|--------------------------------------------------------------------------
-*/
-
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -46,6 +39,10 @@ Route::get('/dashboard', function () {
 
     if (!auth()->check()) {
         return redirect('/login');
+    }
+
+    if (auth()->user()->role == 'developer') {
+        return redirect('/developer/dashboard');
     }
 
     if (auth()->user()->role == 'admin') {
@@ -93,10 +90,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/user/profile', [HomeController::class, 'myProfile'])->name('user.profile');
     
-    // TAMBAHAN: Route untuk memproses update data profil user
     Route::post('/user/profile/update', [HomeController::class, 'updateProfile'])->name('user.profile.update');
     
-    // Checkout
     Route::get('/checkout/buy-now/{product}',
         [CheckoutController::class, 'buyNow'])
         ->name('checkout.buyNow');
@@ -109,19 +104,15 @@ Route::middleware(['auth'])->group(function () {
         [CheckoutController::class, 'process'])
         ->name('checkout.process');
 
-    // BARU: Route untuk memproses validasi kode promo dari form checkout
     Route::post('/checkout/apply-promo',
         [CheckoutController::class, 'applyPromo'])
         ->name('checkout.apply-promo');
 
-    // Payment
     Route::get('/payment/{order}', [PaymentController::class, 'show'])
         ->name('payment.show');
         
-    // Rute upload bukti transfer
     Route::post('/payment/{order}/upload', [PaymentController::class, 'uploadProof'])->name('payment.upload');
 
-    // Riwayat Pesanan
     Route::get('/user/orders', [OrderController::class, 'index'])
         ->name('orders.index');
 
@@ -162,4 +153,24 @@ Route::prefix('admin')
 
         Route::put('/profile/update', [AdminProfileController::class,'update'])
             ->name('admin.profile.update');
+
+        Route::get('/notifications', [\App\Http\Controllers\Admin\DashboardController::class, 'notifications'])
+            ->name('admin.notifications');
+
+        Route::patch('/notifications/{warning}/read', [\App\Http\Controllers\Admin\DashboardController::class, 'markAsRead'])
+            ->name('admin.notifications.read');
 });
+
+Route::prefix('developer')
+    ->middleware(['auth', 'developer'])
+    ->group(function () {
+        
+        Route::get('/dashboard', [\App\Http\Controllers\Developer\DeveloperDashboardController::class, 'index'])
+            ->name('developer.dashboard');
+
+        Route::post('/warning/send', [\App\Http\Controllers\Developer\DeveloperDashboardController::class, 'sendWarning'])
+            ->name('developer.warning.send');
+
+        Route::delete('/product/{product}/takedown', [\App\Http\Controllers\Developer\DeveloperDashboardController::class, 'takedown'])
+            ->name('developer.product.takedown');
+    });

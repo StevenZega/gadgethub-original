@@ -13,13 +13,12 @@ class PromoController extends Controller
 {
     public function index()
     {
-        $promos = Promo::latest()->get();
+        $promos = Promo::where('admin_id', auth()->id())->latest()->get();
         return view('admin.promos.index', compact('promos'));
     }
 
     public function create()
     {
-        // Ganti 'user_id' menjadi 'admin_id' sesuai dengan Model Product
         $products = Product::where('admin_id', auth()->id())
             ->orderBy('name', 'asc')
             ->get();
@@ -43,6 +42,7 @@ class PromoController extends Controller
         ]);
 
         Promo::create([
+            'admin_id'         => auth()->id(), 
             'name'             => $request->name,
             'code'             => strtoupper($request->code),
             'scope'            => $request->jenis_cakupan,
@@ -62,13 +62,20 @@ class PromoController extends Controller
 
     public function show(Promo $promo)
     {
+        if ($promo->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke promo ini.');
+        }
+
         $promo->load('product');
-        
         return view('admin.promos.show', compact('promo'));
     }
 
     public function edit(Promo $promo)
     {
+        if ($promo->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke promo ini.');
+        }
+
         $products = Product::where('admin_id', auth()->id())
             ->orderBy('name', 'asc')
             ->get();
@@ -78,6 +85,10 @@ class PromoController extends Controller
 
     public function update(Request $request, Promo $promo)
     {
+        if ($promo->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke promo ini.');
+        }
+
         $request->validate([
             'name'             => 'required|string|max:255',
             'code'             => [
@@ -116,6 +127,10 @@ class PromoController extends Controller
 
     public function destroy(Promo $promo)
     {
+        if ($promo->admin_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke promo ini.');
+        }
+
         $promo->delete();
         return redirect()
             ->route('promos.index')

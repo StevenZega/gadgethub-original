@@ -180,7 +180,7 @@
                     {{-- FITUR BARU: Input Kode Promo --}}
                     <div class="mb-6">
                         <label class="block text-sm text-slate-400 mb-2">
-                            Punya Kode Promo / Diskon?
+                            Punya Kode Diskon
                         </label>
                         <div class="flex gap-2">
                             <input 
@@ -188,8 +188,7 @@
                                 name="promo_code" 
                                 id="promo_code_input"
                                 value="{{ session('applied_promo_code') }}"
-                                class="flex-1 bg-[#1e293b] border border-white/10 rounded-xl px-4 py-2 text-white uppercase placeholder:normal-case text-sm focus:border-blue-500 focus:outline-none" 
-                                placeholder="CONTOH: HEMAT50">
+                                class="flex-1 bg-[#1e293b] border border-white/10 rounded-xl px-4 py-2 text-white uppercase placeholder:normal-case text-sm focus:border-blue-500 focus:outline-none">
                             
                             {{-- Button ini memicu fungsi javascript di bawah untuk submit klaim promo --}}
                             <button 
@@ -264,7 +263,6 @@
 
 </div>
 
-{{-- SCRIPT BANTUAN UNTUK MEMANIPULASI FORM ACTION SAAT CEK PROMO --}}
 <script>
     function applyPromoSubmit() {
         const promoInput = document.getElementById('promo_code_input').value;
@@ -273,7 +271,6 @@
             return;
         }
 
-        // Alihkan form utama sementara ke route pengecekan promo
         const form = document.getElementById('main-checkout-form');
         form.action = "{{ route('checkout.apply-promo') }}"; 
         form.submit();

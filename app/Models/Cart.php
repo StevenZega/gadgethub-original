@@ -15,7 +15,6 @@ class Cart extends Model
         'quantity'
     ];
 
-    // Relasi balik ke produk untuk mengambil nama, harga, dan gambar gadget
     public function product()
     {
         return $this->belongsTo(Product::class);

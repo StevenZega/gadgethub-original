@@ -5,8 +5,8 @@
 <div class="card-modern">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold mb-1">Daftar Promo</h3>
-            <small class="fw-bold mb-1">Kelola semua promo yang tersedia di toko.</small>
+            <h3 class="fw-bold mb-1">Daftar Promo Anda</h3>
+            <small class="text-muted">Kelola promo yang Anda buat untuk produk Anda sendiri.</small>
         </div>
         <a href="{{ route('promos.create') }}" class="btn-modern">
             <i class="bi bi-plus-circle"></i> Tambah Promo
@@ -77,7 +77,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center py-4">Belum ada data promo.</td>
+                        <td colspan="9" class="text-center py-4 text-muted">Belum ada data promo yang Anda buat.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -110,5 +110,4 @@
         });
     });
 </script>
-
 @endsection
